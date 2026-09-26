@@ -1,0 +1,2041 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ammar - البنك الوزاري الشامل للتابع اللوغاريتمي</title>
+    
+    <!-- خط Cairo العربي بأوزان متعددة -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- مكتبة MathJax لتنسيق الرموز الرياضية -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-body: #08090b;
+            --surface-card: #111317;
+            --surface-inner: #171a21;
+            --surface-accent: #1e222b;
+            --gold-main: #ffd700;
+            --gold-glow: rgba(255, 215, 0, 0.35);
+            --gold-muted: #ffe57f;
+            --crimson-main: #ff3344;
+            --crimson-dark: #8a141e;
+            --crimson-glow: rgba(255, 51, 68, 0.3);
+            --emerald-main: #00e676;
+            --emerald-glow: rgba(0, 230, 118, 0.25);
+            --text-primary: #f8f9fa;
+            --text-secondary: #a4b0be;
+            --border-card: #272c38;
+            --border-highlight: #3b4254;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            text-rendering: geometricPrecision;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(138, 20, 30, 0.18) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(255, 215, 0, 0.12) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            line-height: 1.85;
+            direction: rtl;
+        }
+
+        /* رأس الصفحة */
+        header {
+            background: linear-gradient(180deg, rgba(30, 8, 10, 0.95) 0%, rgba(8, 9, 11, 0.98) 100%);
+            border-bottom: 2px solid var(--gold-main);
+            padding: 30px 15px 24px 15px;
+            text-align: center;
+            box-shadow: 0 10px 35px var(--gold-glow);
+            position: relative;
+        }
+
+        .brand-badge {
+            display: inline-block;
+            border: 2px solid var(--gold-main);
+            padding: 5px 28px;
+            border-radius: 30px;
+            color: var(--gold-main);
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: rgba(0, 0, 0, 0.75);
+            box-shadow: 0 0 15px var(--gold-glow);
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        h1 span {
+            color: var(--gold-main);
+            text-shadow: 0 0 12px var(--gold-glow);
+        }
+
+        .header-sub {
+            color: var(--text-secondary);
+            font-size: 14.5px;
+            margin: 8px auto 0 auto;
+            max-width: 900px;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, var(--gold-main), #d4af37);
+            color: #0b0c0e;
+            border: none;
+            padding: 10px 26px;
+            border-radius: 25px;
+            font-weight: 800;
+            font-size: 13.5px;
+            cursor: pointer;
+            margin-top: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 18px var(--gold-glow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px var(--gold-glow);
+        }
+
+        /* شريط التبويبات */
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(13, 15, 19, 0.94);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border-card);
+            padding: 10px 0;
+        }
+
+        .nav-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            overflow-x: auto;
+            gap: 8px;
+            padding: 0 12px;
+            scrollbar-width: thin;
+        }
+
+        .nav-tab-btn {
+            background: var(--surface-inner);
+            border: 1px solid var(--border-card);
+            color: var(--text-secondary);
+            padding: 9px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13.5px;
+            font-weight: 700;
+            white-space: nowrap;
+            transition: all 0.25s ease;
+        }
+
+        .nav-tab-btn:hover {
+            border-color: var(--gold-main);
+            color: var(--gold-main);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .nav-tab-btn.active {
+            background: linear-gradient(135deg, var(--crimson-main), var(--crimson-dark));
+            color: #ffffff;
+            border-color: #ff6b77;
+            box-shadow: 0 0 15px var(--crimson-glow);
+        }
+
+        /* الحاوية والمظهر العام */
+        .container {
+            max-width: 1120px;
+            margin: 30px auto;
+            padding: 0 16px 80px 16px;
+        }
+
+        .section-view {
+            display: none;
+            background: var(--surface-card);
+            border: 1px solid var(--border-card);
+            border-radius: 14px;
+            padding: 28px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .section-view.active {
+            display: block;
+            animation: modernFade 0.3s ease-out;
+        }
+
+        @keyframes modernFade {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            border-bottom: 2px solid var(--border-card);
+            padding-bottom: 14px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            color: var(--gold-main);
+            font-size: 21px;
+            font-weight: 900;
+        }
+
+        .tag-pill {
+            background: rgba(255, 51, 68, 0.15);
+            border: 1px solid var(--crimson-main);
+            color: #ff858f;
+            font-size: 12.5px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 800;
+        }
+
+        /* بطاقات المسائل */
+        .exam-block {
+            background: var(--surface-inner);
+            border-right: 5px solid var(--gold-main);
+            border: 1px solid var(--border-card);
+            border-right-width: 5px;
+            border-right-color: var(--gold-main);
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 28px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            transition: border-color 0.2s;
+        }
+
+        .exam-block:hover {
+            border-color: var(--border-highlight);
+            border-right-color: var(--gold-main);
+        }
+
+        .exam-question-title {
+            color: #ffffff;
+            font-size: 16.5px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .exam-question-title::before {
+            content: "❖";
+            color: var(--gold-main);
+            font-size: 14px;
+        }
+
+        .exam-paper-text {
+            background: #0c0d10;
+            border: 1px solid var(--border-card);
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 15px;
+            color: #e4e7eb;
+        }
+
+        .toggle-solution-btn {
+            background: var(--surface-accent);
+            border: 1.5px solid var(--gold-main);
+            color: var(--gold-main);
+            padding: 9px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 13.5px;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-solution-btn:hover {
+            background: var(--gold-main);
+            color: #0b0c0e;
+            box-shadow: 0 0 15px var(--gold-glow);
+        }
+
+        .solution-drawer {
+            display: none;
+            margin-top: 18px;
+            padding: 22px;
+            background: #0f1115;
+            border-left: 4px solid var(--crimson-main);
+            border-radius: 6px;
+            border-top: 1px solid var(--border-card);
+            border-bottom: 1px solid var(--border-card);
+            border-right: 1px solid var(--border-card);
+        }
+
+        .solution-drawer.open {
+            display: block;
+            animation: modernFade 0.25s ease-out;
+        }
+
+        .step-title {
+            color: var(--gold-muted);
+            font-weight: 800;
+            font-size: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-title::before {
+            content: "◀";
+            color: var(--gold-main);
+            font-size: 12px;
+        }
+
+        .condition-box {
+            background: rgba(255, 51, 68, 0.08);
+            border: 1px solid rgba(255, 51, 68, 0.4);
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin: 14px 0;
+            color: #ff9da5;
+            font-weight: 700;
+        }
+
+        .theorem-box {
+            background: rgba(255, 215, 0, 0.05);
+            border: 1.5px solid rgba(255, 215, 0, 0.4);
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin: 16px 0;
+            color: #f1f3f5;
+        }
+
+        .theorem-box b {
+            color: var(--gold-main);
+        }
+
+        .analysis-box {
+            background: #14171d;
+            border-right: 4px solid var(--emerald-main);
+            border-top: 1px solid var(--border-card);
+            border-bottom: 1px solid var(--border-card);
+            border-left: 1px solid var(--border-card);
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-top: 14px;
+            color: #f1f3f5;
+        }
+
+        .analysis-box-title {
+            color: var(--emerald-main);
+            font-weight: 900;
+            font-size: 14.5px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ans-badge {
+            background: rgba(255, 215, 0, 0.12);
+            border: 1.5px dashed var(--gold-main);
+            color: var(--gold-main);
+            padding: 9px 18px;
+            border-radius: 6px;
+            font-weight: 800;
+            margin-top: 12px;
+            display: inline-block;
+        }
+
+        /* الجداول الرياضية */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin: 16px 0 14px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-highlight);
+        }
+
+        table.var-grid {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            background: #090a0d;
+            direction: ltr !important;
+        }
+
+        table.var-grid th, table.var-grid td {
+            border: 1px solid #282e3c;
+            padding: 11px 10px;
+            font-size: 14.5px;
+            white-space: nowrap;
+        }
+
+        table.var-grid th {
+            background: #23080b;
+            color: var(--gold-main);
+            font-weight: 800;
+            min-width: 130px;
+        }
+
+        .ar-txt {
+            display: inline-block;
+            direction: rtl !important;
+            unicode-bidi: isolate;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+        }
+
+        /* الرسوم البيانية */
+        .chart-box {
+            background: #060708;
+            border: 1.5px solid var(--border-card);
+            border-radius: 10px;
+            padding: 16px;
+            height: 400px;
+            margin-top: 16px;
+            position: relative;
+        }
+
+        .chart-caption-bar {
+            background: #14171d;
+            border: 1px solid var(--border-card);
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--gold-muted);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chart-caption-bar span.badge {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--gold-main);
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        /* بطاقات الأسئلة المؤتمتة */
+        .mcq-question {
+            background: var(--surface-inner);
+            border: 1px solid var(--border-card);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .mcq-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin: 16px 0 12px 0;
+        }
+
+        .mcq-opt {
+            background: #0d0f13;
+            border: 1px solid #333a48;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .mcq-opt:hover {
+            border-color: var(--gold-main);
+            background: #141820;
+        }
+
+        .mcq-opt.selected-correct {
+            background: rgba(0, 230, 118, 0.15);
+            border-color: var(--emerald-main);
+            color: var(--emerald-main);
+            font-weight: 800;
+            box-shadow: 0 0 10px var(--emerald-glow);
+        }
+
+        .mcq-opt.selected-wrong {
+            background: rgba(255, 51, 68, 0.15);
+            border-color: var(--crimson-main);
+            color: #ff858f;
+            font-weight: 800;
+            box-shadow: 0 0 10px var(--crimson-glow);
+        }
+
+        .mcq-feedback {
+            font-size: 14px;
+            font-weight: 800;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .division-box {
+            background: #08090b;
+            border: 1.5px solid var(--gold-main);
+            border-radius: 8px;
+            padding: 18px;
+            margin: 16px 0;
+            font-family: monospace;
+            direction: ltr;
+            text-align: left;
+            line-height: 1.6;
+            color: #00e676;
+            font-size: 14px;
+        }
+
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+            header {
+                background: none !important;
+                border-bottom: 2px solid #000 !important;
+                color: #000 !important;
+                box-shadow: none !important;
+                padding: 10px 0 !important;
+            }
+            h1, h1 span, .brand-badge {
+                color: #000 !important;
+                border-color: #000 !important;
+                background: none !important;
+            }
+            .nav-bar, .print-btn, .toggle-solution-btn {
+                display: none !important;
+            }
+            .section-view {
+                display: block !important;
+                background: #ffffff !important;
+                border: 1px solid #ccc !important;
+                box-shadow: none !important;
+                margin-bottom: 25px !important;
+                page-break-after: always;
+            }
+            .solution-drawer {
+                display: block !important;
+                background: #fdfdfd !important;
+                border-left: 3px solid #000 !important;
+                color: #000 !important;
+            }
+            .exam-block {
+                background: #ffffff !important;
+                border: 1px solid #ccc !important;
+                border-right: 4px solid #000 !important;
+                color: #000 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+            }
+            table.var-grid, .mcq-question, .chart-caption-bar {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+        }
+    </style>
+</head>
+<body class="tex2jax_process">
+
+<header>
+    <div class="header-top-row">
+        <div class="brand-badge">ammar</div>
+    </div>
+    <h1>البنك الوزاري الشامل للتابع اللوغاريتمي <span>(بكالوريا علمي - سوريا)</span></h1>
+    <p class="header-sub">المنهاج التخصصي الكامل: جداول الاطراد والإشارة أولاً ثم المناقشة الاستنتاجية، مبرهنتا الصورة والقيمة الوسطى، إشارة الفرق $h(x)$، الأتمتة الكاملة، ومسائل الـ 100 علامة الكبرى</p>
+    <button class="print-btn" onclick="printBank()">
+        🖨️ طباعة البنك أو حفظه كـ PDF امتحاني
+    </button>
+</header>
+
+<div class="nav-bar">
+    <div class="nav-inner">
+        <button class="nav-tab-btn active" onclick="showTab(event, 'tab-mcq')">قسم الأتمتة والأسئلة الموضوعية</button>
+        <button class="nav-tab-btn" onclick="showTab(event, 'tab-variations')">مسائل الـ 100 علامة ومبرهنة القيمة الوسطى</button>
+        <button class="nav-tab-btn" onclick="showTab(event, 'tab-unified-eq')">المعادلات والمتراجحات وجمل المعادلات (قسم موحد)</button>
+        <button class="nav-tab-btn" onclick="showTab(event, 'tab-rel-pos-tables')">الأوضاع النسبية والمقاربات (جداول الفرق $h$ والمناقشة)</button>
+        <button class="nav-tab-btn" onclick="showTab(event, 'tab-limits-indet')">إزالة عدم التعيين وحساب النهايات</button>
+        <button class="nav-tab-btn" onclick="showTab(event, 'tab-deriv-cont-app')">الاستمرار وقابلية الاشتقاق والتقريب التآلفي</button>
+        <button class="nav-tab-btn" onclick="showTab(event, 'tab-points-geom')">مجموعات نقاط المستوي والتبسيط وإثبات التدريج</button>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- ==================== تبويب الأتمتة ==================== -->
+    <div id="tab-mcq" class="section-view active">
+        <div class="section-header">
+            <h2>قسم الأتمتة: تدريبات بنك الأسئلة الموضوعية الوزارية (مع الحل النموذجي لكافة الأسئلة)</h2>
+            <span class="tag-pill">اختيار من متعدد تفاعلي</span>
+        </div>
+
+        <div class="mcq-question" id="mcq-cmp">
+            <b>السؤال 1 (مقارنة مقادير لوغاريتمية):</b> قارن بين المقدارين $A = \ln^3\left(\frac{1}{e^2}\right)$ و $B = \ln\left[\left(\frac{1}{e^2}\right)^3\right]$:
+            <div class="mcq-options">
+                <div class="mcq-opt" onclick="checkMCQ('cmp', 0, false)">أ) $A = B$</div>
+                <div class="mcq-opt" onclick="checkMCQ('cmp', 1, false)">ب) $A > B$</div>
+                <div class="mcq-opt" onclick="checkMCQ('cmp', 2, true)">ج) $A < B$ (أي $B > A$)</div>
+                <div class="mcq-opt" onclick="checkMCQ('cmp', 3, false)">د) غير معرّف</div>
+            </div>
+            <div class="mcq-feedback" id="fb-cmp"></div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-cmp')" style="margin-top:10px;">توضيح الحل الرياضي السلمي</button>
+            <div class="solution-drawer" id="sol-mcq-cmp">
+                • المقدار الأول: $\ln\left(\frac{1}{e^2}\right) = \ln(e^{-2}) = -2$. وبالتالي:
+                $$A = \left[\ln\left(\frac{1}{e^2}\right)\right]^3 = (-2)^3 = -8$$
+                • المقدار الثاني بتطبيق خواص قوى اللوغاريتم:
+                $$B = \ln\left[\left(\frac{1}{e^2}\right)^3\right] = 3 \ln\left(\frac{1}{e^2}\right) = 3(-2) = -6$$
+                بما أن $-6 > -8$، فإن $B > A$ أي $A < B$.
+            </div>
+        </div>
+
+        <div class="mcq-question" id="mcq-dom1">
+            <b>السؤال 2:</b> مجموعة تعريف التابع $f(x) = \ln^2(x-3)$ هي:
+            <div class="mcq-options">
+                <div class="mcq-opt" onclick="checkMCQ('dom1', 0, true)">أ) $]3, +\infty[$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom1', 1, false)">ب) $\mathbb{R} \setminus \{3\}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom1', 2, false)">ج) $[3, +\infty[$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom1', 3, false)">د) $\mathbb{R}$</div>
+            </div>
+            <div class="mcq-feedback" id="fb-dom1"></div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-dom1')" style="margin-top:10px;">التوضيح الرياضي</button>
+            <div class="solution-drawer" id="sol-mcq-dom1">
+                التربيع على التابع كاملاً: $\ln^2(x-3) = [\ln(x-3)]^2$. يشترط فقط أن يكون ما داخل اللوغاريتم موجباً تماماً: $x - 3 > 0 \implies x > 3 \implies D_f = ]3, +\infty[$.
+            </div>
+        </div>
+
+        <div class="mcq-question" id="mcq-dom2">
+            <b>السؤال 3:</b> مجموعة تعريف التابع $f(x) = \ln\left((x-3)^2\right)$ هي:
+            <div class="mcq-options">
+                <div class="mcq-opt" onclick="checkMCQ('dom2', 0, false)">أ) $]3, +\infty[$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom2', 1, true)">ب) $\mathbb{R} \setminus \{3\}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom2', 2, false)">ج) $]0, +\infty[$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom2', 3, false)">د) $]-\infty, 3[$</div>
+            </div>
+            <div class="mcq-feedback" id="fb-dom2"></div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-dom2')" style="margin-top:10px;">التوضيح الرياضي</button>
+            <div class="solution-drawer" id="sol-mcq-dom2">
+                التربيع داخل اللوغاريتم: يشترط $(x-3)^2 > 0$. المربع موجب دوماً لجميع الأعداد الحقيقية عدا القيمة التي تعدمه: $x - 3 \ne 0 \iff x \ne 3$. إذن: $D_f = \mathbb{R} \setminus \{3\}$.
+            </div>
+        </div>
+
+        <div class="mcq-question" id="mcq-dom3">
+            <b>السؤال 4:</b> مجموعة تعريف التابع $f(x) = \ln|x-5|$ هي:
+            <div class="mcq-options">
+                <div class="mcq-opt" onclick="checkMCQ('dom3', 0, false)">أ) $]5, +\infty[$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom3', 1, true)">ب) $\mathbb{R} \setminus \{5\}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom3', 2, false)">ج) $]-\infty, 5[$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom3', 3, false)">د) $[5, +\infty[$</div>
+            </div>
+            <div class="mcq-feedback" id="fb-dom3"></div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-dom3')" style="margin-top:10px;">التوضيح الرياضي</button>
+            <div class="solution-drawer" id="sol-mcq-dom3">
+                القيمة المطلقة موجبة دوماً ما عدا عندما ينعدم ما بداخلها: $|x-5| > 0 \iff x - 5 \ne 0 \iff x \ne 5 \implies D_f = \mathbb{R} \setminus \{5\}$.
+            </div>
+        </div>
+
+        <div class="mcq-question" id="mcq-dom4">
+            <b>السؤال 5:</b> مجموعة تعريف التابع $f(x) = \ln(x^2 + 3)$ هي:
+            <div class="mcq-options">
+                <div class="mcq-opt" onclick="checkMCQ('dom4', 0, true)">أ) $\mathbb{R}$ كاملاً</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom4', 1, false)">ب) $]0, +\infty[$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom4', 2, false)">ج) $\mathbb{R} \setminus \{-\sqrt{3}, \sqrt{3}\}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom4', 3, false)">د) $]\sqrt{3}, +\infty[$</div>
+            </div>
+            <div class="mcq-feedback" id="fb-dom4"></div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-dom4')" style="margin-top:10px;">التوضيح الرياضي</button>
+            <div class="solution-drawer" id="sol-mcq-dom4">
+                المقدار $x^2 + 3 \ge 3 > 0$ موجب تماماً أياً كانت $x \in \mathbb{R}$، لذلك التابع معرف على كامل مجموعة الأعداد الحقيقية $\mathbb{R}$.
+            </div>
+        </div>
+
+        <div class="mcq-question" id="mcq-dom5">
+            <b>السؤال 6:</b> مجموعة تعريف التابع $f(x) = \ln\left(\frac{x+2}{x}\right)$ هي:
+            <div class="mcq-options">
+                <div class="mcq-opt" onclick="checkMCQ('dom5', 0, false)">أ) $]0, +\infty[$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom5', 1, false)">ب) $]-2, 0[$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom5', 2, true)">ج) $]-\infty, -2[ \cup ]0, +\infty[$</div>
+                <div class="mcq-opt" onclick="checkMCQ('dom5', 3, false)">د) $\mathbb{R} \setminus \{-2, 0\}$</div>
+            </div>
+            <div class="mcq-feedback" id="fb-dom5"></div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-dom5')" style="margin-top:10px;">التوضيح الرياضي</button>
+            <div class="solution-drawer" id="sol-mcq-dom5">
+                يشترط أن يكون ما بداخل اللوغاريتم موجباً تماماً: $\frac{x+2}{x} > 0$.<br>
+                بدراسة إشارة الكسر: ينعدم البسط عند $x = -2$ وينعدم المقام عند $x = 0$. الكسر موجب خارج مجال الجذرين، ومنه:
+                $$D_f = ]-\infty, -2[ \cup ]0, +\infty[$$
+            </div>
+        </div>
+
+        <div class="mcq-question" id="mcq-lim1">
+            <b>السؤال 7:</b> قيمة النهاية $\lim_{x \to 0^+} \sqrt{x}\ln(x)$ تساوي:
+            <div class="mcq-options">
+                <div class="mcq-opt" onclick="checkMCQ('lim1', 0, false)">أ) $-\infty$</div>
+                <div class="mcq-opt" onclick="checkMCQ('lim1', 1, true)">ب) $0$</div>
+                <div class="mcq-opt" onclick="checkMCQ('lim1', 2, false)">ج) $1$</div>
+                <div class="mcq-opt" onclick="checkMCQ('lim1', 3, false)">د) $+\infty$</div>
+            </div>
+            <div class="mcq-feedback" id="fb-lim1"></div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-lim1')" style="margin-top:10px;">التوضيح الرياضي</button>
+            <div class="solution-drawer" id="sol-mcq-lim1">
+                نضع المتحول المساعد $t = \sqrt{x} \iff x = t^2$. عندما $x \to 0^+$ فإن $t \to 0^+$:<br>
+                $$\lim_{x \to 0^+} \sqrt{x}\ln x = \lim_{t \to 0^+} t \ln(t^2) = 2 \lim_{t \to 0^+} (t \ln t) = 2(0) = 0$$
+            </div>
+        </div>
+
+        <div class="mcq-question" id="mcq-max1">
+            <b>السؤال 8:</b> إذا كان $f(x) = \frac{\ln x}{x^2}$، فإن القيمة الكبرى محلياً للتابع هي:
+            <div class="mcq-options">
+                <div class="mcq-opt" onclick="checkMCQ('max1', 0, false)">أ) $1$</div>
+                <div class="mcq-opt" onclick="checkMCQ('max1', 1, true)">ب) $\frac{1}{2e}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('max1', 2, false)">ج) $\frac{1}{e}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('max1', 3, false)">د) $e$</div>
+            </div>
+            <div class="mcq-feedback" id="fb-max1"></div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-max1')" style="margin-top:10px;">التوضيح الرياضي</button>
+            <div class="solution-drawer" id="sol-mcq-max1">
+                المشتق: $f'(x) = \frac{\frac{1}{x} \cdot x^2 - (\ln x)(2x)}{x^4} = \frac{1 - 2\ln x}{x^3}$.<br>
+                ينعدم المشتق عندما $1 - 2\ln x = 0 \iff \ln x = \frac{1}{2} \iff x = e^{1/2} = \sqrt{e}$.<br>
+                القيمة الكبرى هي صورة هذه النقطة:
+                $$f(\sqrt{e}) = \frac{\ln(e^{1/2})}{(\sqrt{e})^2} = \frac{1/2}{e} = \frac{1}{2e}$$
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== تبويب مسائل الـ 100 علامة ==================== -->
+    <div id="tab-variations" class="section-view">
+        <div class="section-header">
+            <h2>مسائل الـ 100 علامة الكبرى (جداول التغيرات أولاً ثم التحليل، مبرهنة القيمة الوسطى، ومبرهنة الصورة)</h2>
+            <span class="tag-pill">100 درجة كاملة</span>
+        </div>
+
+        <!-- مسألة 1 -->
+        <div class="exam-block">
+            <div class="exam-question-title">مسألة 1 (100 درجة كاملة): دراسة $f(x) = \frac{1 + 2\ln x}{x^2}$ وإثبات وجود وحصر حل وحيد والانسحاب</div>
+            <div class="exam-paper-text">
+                ليكن $f$ التابع المعرف على $]0, +\infty[$ وفق: $f(x) = \frac{1 + 2\ln x}{x^2}$ وليكن $C_f$ خطه البياني في معلم متجانس.<br>
+                <b>المطلوب تحريرياً:</b><br>
+                1) احسب نهايات التابع $f$ عند أطراف مجالات تعريفه بالتفصيل، واكتب معادلة كل مقارب أفقي أو شاقولي مع ذكر موقعه.<br>
+                2) ادرس تغيرات التابع $f$ ونظم بها جدولاً مبيناً القيم الحدية ونوعها.<br>
+                3) <b>أثبت أن المعادلة $f(x) = 0$ تقبل حلاً وحيداً $\alpha$ ينتمي إلى المجال $]0.5, \, 0.8[$.</b><br>
+                4) ارسم في معلم متجانس الخط البياني $C_f$ ومقارباته، واستنتج رسم الخط $C_g$ للتابع $g(x) = \frac{1 + x^2 + 2\ln x}{x^2}$.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-var-100-1')">عرض الحل النموذجي السلمي المفصل</button>
+            <div class="solution-drawer" id="sol-var-100-1">
+                <div class="step-title">1) حساب النهايات والمقاربات:</div>
+                • $\lim_{x \to 0^+} f(x) = \frac{-\infty}{0^+} = -\infty \implies$ المستقيم $x = 0$ مقارب شاقولي يقع الخط يمينه.<br>
+                • $\lim_{x \to +\infty} f(x) = \lim_{x \to +\infty} \left[\frac{1}{x^2} + 2 \cdot \frac{1}{x} \cdot \frac{\ln x}{x}\right] = 0 + 2(0 \times 0) = 0 \implies$ المستقيم $y = 0$ مقارب أفقي بجوار $+\infty$.
+
+                <div class="step-title" style="margin-top:16px;">2) دراسة المشتق وجدول التغيرات أولاً ثم التحليل:</div>
+                $$f'(x) = \frac{(2/x)(x^2) - (1+2\ln x)(2x)}{x^4} = \frac{-4\ln x}{x^3}$$
+                ينعدم المشتق عند $x = 1$، والقيمة الحدية هي $f(1) = 1$.<br>
+                <b>جدول التغيرات:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>1</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$f'(x)$</th><td style="background:#23080b">||</td><td>+</td><td>0</td><td>-</td><td></td></tr>
+                        <tr><th>$f(x)$</th><td style="background:#23080b">|| $-\infty$</td><td>$\nearrow$</td><td>1</td><td>$\searrow$</td><td>0</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والتحليل الاستنتاجي من الجدول:</div>
+                    - التابع متزايد تماماً على المجال $]0, 1]$ ومتناقص تماماً على $[1, +\infty[$.<br>
+                    - يبلغ التابع قيمة كبرى محلياً وشاملة عند النقطة $(1, 1)$ وهي $f(1) = 1$.<br>
+                    - بما أن $f(1) = 1 > 0$ والنهاية عند الصفر هي $-\infty$، فإن المنحني يعبر محور الفواصل حتماً في نقطة وحيدة قبل الذروة.
+                </div>
+
+                <div class="step-title" style="margin-top:16px;">3) تطبيق مبرهنة القيمة الوسطى لحصر الحل:</div>
+                <div class="theorem-box">
+                    <b>مبرهنة القيمة الوسطى على المجال المحدود $[0.5, \, 0.8]$:</b><br>
+                    1. <b>الاستمرار:</b> التابع مستمر على المجال المحدود $[0.5, \, 0.8]$ لأنه اشتقاقي عليه.<br>
+                    2. <b>الاطراد التام:</b> التابع متزايد تماماً على المجال $[0.5, \, 0.8]$ لأن مشتقّه $f'(x) > 0$ تماماً على هذا المجال ($x < 1$).<br>
+                    3. <b>شرط جداء الصورتين:</b><br>
+                    • عند $x = 0.5$: $f(0.5) = \frac{1 + 2\ln(0.5)}{(0.5)^2} \approx \frac{1 + 2(-0.693)}{0.25} = -1.544 < 0$.<br>
+                    • عند $x = 0.8$: $f(0.8) = \frac{1 + 2\ln(0.8)}{(0.8)^2} \approx \frac{1 + 2(-0.223)}{0.64} = +0.865 > 0$.<br>
+                    بما أن $f(0.5) \cdot f(0.8) < 0$، فبحسب مبرهنة القيمة الوسطى تقبل المعادلة $f(x) = 0$ حلاً وحيداً $\alpha \in ]0.5, \, 0.8[$.
+                </div>
+
+                <div class="step-title" style="margin-top:16px;">4) استنتاج الخط $C_g$ والرسم البياني:</div>
+                نلاحظ أن $g(x) = f(x) + 1$، فالخط $C_g$ ينتج عن $C_f$ بانسحاب شاقولي نحو الأعلى مقداره وحدة واحدة وفق الشعاع $\vec{v} = (0, 1)$.
+                <div class="chart-caption-bar">
+                    <span>التمثيل البياني للخط $C_f$ للتابع $f(x) = \frac{1+2\ln x}{x^2}$</span>
+                    <span class="badge">مقارب شاقولي $x=0$ | مقارب أفقي $y=0$ | ذروة كبرى (1, 1)</span>
+                </div>
+                <div class="chart-box"><canvas id="chartVar1"></canvas></div>
+            </div>
+        </div>
+
+        <!-- مسألة 2 -->
+        <div class="exam-block">
+            <div class="exam-question-title">مسألة 2 (100 درجة كاملة): دراسة $f(x) = \frac{2 + \ln x}{x+1}$ بالاعتماد على مبرهنة الصورة للتابع المساعد $g$</div>
+            <div class="exam-paper-text">
+                ليكن $f(x) = \frac{2 + \ln x}{x+1}$ على $]0, +\infty[$، و $g(x) = \frac{1}{x} - 1 - \ln x$.<br>
+                1) ادرس تغيرات التابع المساعد $g$ مع حساب النهايات ونظم بها جدولاً.<br>
+                2) <b>أثبت بحسب مبرهنة الصورة أن المعادلة $g(x) = 0$ تقبل حلاً وحيداً في $]0, +\infty[$، تحقق أن الحل هو $1$، واستنتج إشارة $g(x)$.</b><br>
+                3) احسب نهايات $f$ واكتب المقاربات.<br>
+                4) أثبت أن $f'(x) = \frac{g(x)}{(x+1)^2}$ ثم نظم جدول تغيرات $f$ وارسم خطه البياني $C_f$.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-var-100-2')">عرض الحل النموذجي السلمي المفصل</button>
+            <div class="solution-drawer" id="sol-var-100-2">
+                <div class="step-title">1) دراسة تغيرات التابع المساعد $g$ (الجدول أولاً ثم التحليل):</div>
+                النهايات: $\lim_{x \to 0^+} g(x) = +\infty$ و $\lim_{x \to +\infty} g(x) = -\infty$. المشتق: $g'(x) = -\frac{1+x}{x^2} < 0$.<br>
+                <b>جدول تغيرات التابع المساعد $g$:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>1</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$g'(x)$</th><td style="background:#23080b">||</td><td>-</td><td></td><td>-</td><td></td></tr>
+                        <tr><th>$g(x)$</th><td style="background:#23080b">|| $+\infty$</td><td>$\searrow$</td><td>0</td><td>$\searrow$</td><td>$-\infty$</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والاستنتاج وتطبيق مبرهنة الصورة:</div>
+                    1. التابع مستمر ومتناقص تماماً على المجال $I = ]0, +\infty[$.<br>
+                    2. صورة المجال: $g(]0, +\infty[) = \left] \lim_{x \to +\infty} g(x), \lim_{x \to 0^+} g(x) \right[ = ]-\infty, +\infty[ = \mathbb{R}$.<br>
+                    3. بما أن $0 \in \mathbb{R}$، فالمعادلة $g(x) = 0$ تقبل حلاً وحيداً $\alpha$. وبما أن $g(1) = 1 - 1 - 0 = 0$ فإن الحل الوحيد هو $\alpha = 1$.<br>
+                    4. <b>استنتاج إشارة $g(x)$:</b> موجبة تماماً على $]0, 1[$ وسالبة تماماً على $]1, +\infty[$ وتنعدم عند $1$.
+                </div>
+
+                <div class="step-title" style="margin-top:16px;">2) دراسة تغيرات التابع $f(x)$ (الجدول أولاً ثم التحليل):</div>
+                النهايات: $\lim_{x \to 0^+} f(x) = -\infty$ ($x = 0$ مقارب شاقولي) و $\lim_{x \to +\infty} f(x) = 0$ ($y = 0$ مقارب أفقي).<br>
+                المشتق: $f'(x) = \frac{g(x)}{(x+1)^2}$ وتوافقه بالإشارة تماماً.<br>
+                <b>جدول تغيرات التابع $f$:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>1</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$f'(x)$</th><td style="background:#23080b">||</td><td>+</td><td>0</td><td>-</td><td></td></tr>
+                        <tr><th>$f(x)$</th><td style="background:#23080b">|| $-\infty$</td><td>$\nearrow$</td><td>1</td><td>$\searrow$</td><td>0</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة البيانية:</div>
+                    - يبلغ التابع قيمة كبرى محلياً هي $f(1) = 1$.<br>
+                    - يتزايد التابع من المقارب الشاقولي $x=0$ نحو الذروة $(1, 1)$ ثم يتناقص مقترباً من المقارب الأفقي $y=0$.
+                </div>
+                <div class="chart-caption-bar">
+                    <span>التمثيل البياني للخط $C_f$ للتابع $f(x) = \frac{2+\ln x}{x+1}$</span>
+                    <span class="badge">قيمة كبرى (1, 1) | مقارب شاقولي $x=0$ | مقارب أفقي $y=0$</span>
+                </div>
+                <div class="chart-box"><canvas id="chartVar2"></canvas></div>
+            </div>
+        </div>
+
+        <!-- مسألة 3 -->
+        <div class="exam-block">
+            <div class="exam-question-title">مسألة 3: دراسة $f(x) = x - 2 + \ln x$ ومبرهنة الصورة ثم حصر الجذر بمبرهنة القيمة الوسطى</div>
+            <div class="exam-paper-text">
+                ليكن $f(x) = x - 2 + \ln x$ على $]0, +\infty[$.<br>
+                1) احسب النهايات وادرس تغيرات التابع ونظم بها جدولاً.<br>
+                2) <b>أثبت بمبرهنة الصورة وجود جذر وحيد $\alpha$ للمعادلة $f(x) = 0$ في $]0, +\infty[$.</b><br>
+                3) <b>أثبت بمبرهنة القيمة الوسطى أن $\alpha \in ]1.5, \, 1.6[$.</b><br>
+                4) ارسم الخط البياني $C_f$.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-var-ivt-classic')">عرض الحل والبرهان السلمي</button>
+            <div class="solution-drawer" id="sol-var-ivt-classic">
+                <div class="step-title">1) دراسة تغيرات التابع (الجدول أولاً ثم التحليل):</div>
+                النهايات: $\lim_{x \to 0^+} f(x) = -\infty$ ($x = 0$ مقارب شاقولي) و $\lim_{x \to +\infty} f(x) = +\infty$.<br>
+                المشتق: $f'(x) = 1 + \frac{1}{x} = \frac{x+1}{x} > 0$.<br>
+                <b>جدول التغيرات:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$f'(x)$</th><td style="background:#23080b">||</td><td>+</td><td></td></tr>
+                        <tr><th>$f(x)$</th><td style="background:#23080b">|| $-\infty$</td><td>$\nearrow$</td><td>$+\infty$</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة بمبرهنة الصورة:</div>
+                    - التابع مستمر ومتزايد تماماً على $]0, +\infty[$.<br>
+                    - صورة المجال: $f(]0, +\infty[) = ]-\infty, +\infty[ = \mathbb{R}$.<br>
+                    - بما أن $0 \in \mathbb{R}$، فالمعادلة $f(x) = 0$ تقبل حلاً وحيداً $\alpha \in ]0, +\infty[$.
+                </div>
+
+                <div class="step-title" style="margin-top:16px;">2) حصر الحل بمبرهنة القيمة الوسطى:</div>
+                <div class="theorem-box">
+                    • التابع مستمر ومتزايد تماماً على المجال $[1.5, \, 1.6]$.<br>
+                    • $f(1.5) = 1.5 - 2 + \ln(1.5) \approx -0.5 + 0.4055 = -0.0945 < 0$.<br>
+                    • $f(1.6) = 1.6 - 2 + \ln(1.6) \approx -0.4 + 0.4700 = +0.0700 > 0$.<br>
+                    بما أن $f(1.5) \cdot f(1.6) < 0$، فبحسب مبرهنة القيمة الوسطى يقع الحل في المجال المفتوح $]1.5, \, 1.6[$.
+                </div>
+                <div class="chart-caption-bar">
+                    <span>التمثيل البياني للخط $C_f$ للتابع $f(x) = x - 2 + \ln x$</span>
+                    <span class="badge">يقطع محور الفواصل عند $\alpha \approx 1.55$ | مقارب شاقولي $x=0$</span>
+                </div>
+                <div class="chart-box"><canvas id="chartVarIVT"></canvas></div>
+            </div>
+        </div>
+
+        <!-- مسألة 4 -->
+        <div class="exam-block">
+            <div class="exam-question-title">مسألة 4: التابع الكسري اللوغاريتمي $f(x) = \ln\left(\frac{x+2}{x}\right)$ وإثبات مركز التناظر بالتفصيل للمجالين معاً</div>
+            <div class="exam-paper-text">
+                ليكن $f(x) = \ln\left(\frac{x+2}{x}\right)$. عيّن مجموعة التعريف، احسب النهايات، أثبت أن النقطة $I(-1, 0)$ مركز تناظر، نظم جدول التغيرات، وارسم المنحني البياني.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-var-100-3')">عرض الحل النموذجي السلمي المفصل</button>
+            <div class="solution-drawer" id="sol-var-100-3">
+                • مجموعة التعريف: $\frac{x+2}{x} > 0 \implies D_f = ]-\infty, -2[ \cup ]0, +\infty[$.<br>
+                • النهايات: $\lim_{x \to \pm\infty} f(x) = 0$ ($y = 0$ مقارب أفقي)، $\lim_{x \to -2^-} f(x) = -\infty$ ($x = -2$ مقارب شاقولي يساره)، و $\lim_{x \to 0^+} f(x) = +\infty$ ($x = 0$ مقارب شاقولي يمينه).<br>
+                • المشتق: $f'(x) = \frac{-2}{x(x+2)} < 0$ دوماً على $D_f$.<br><br>
+                <b>جدول التغيرات أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>$-\infty$</td><td></td><td>-2</td><td style="background:#1a1c22"><span class="ar-txt">غير معرّف</span></td><td>0</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$f'(x)$</th><td></td><td>-</td><td style="background:#23080b">||</td><td style="background:#1a1c22"><span class="ar-txt">غير معرّف</span></td><td style="background:#23080b">||</td><td>-</td><td></td></tr>
+                        <tr><th>$f(x)$</th><td>0</td><td>$\searrow$</td><td style="background:#23080b">|| $-\infty$</td><td style="background:#1a1c22"><span class="ar-txt">غير معرّف</span></td><td style="background:#23080b">|| $+\infty$</td><td>$\searrow$</td><td>0</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة وإثبات مركز التناظر $I(-1, 0)$ بالتفصيل لكلا المجالين:</div>
+                    1. <b>الشرط الأول للمجالين:</b> أياً كان $x \in D_f$ فإن $x < -2$ أو $x > 0$.<br>
+                    بضرب الطرفين بـ $-1$: $-x > 2$ أو $-x < 0$.<br>
+                    بطرح $2$ من الأطراف: $-2 - x > 0$ أو $-2 - x < -2$.<br>
+                    إذن $(-2 - x) \in ]0, +\infty[ \cup ]-\infty, -2[ = D_f$.<br>
+                    2. <b>الشرط الثاني:</b> $f(-2-x) + f(x) = \ln\left(\frac{x}{x+2}\right) + \ln\left(\frac{x+2}{x}\right) = \ln(1) = 0 = 2(0)$.<br>
+                    فالنقطة $I(-1, 0)$ مركز تناظر حقيقي وتام للخط $C_f$.
+                </div>
+                <div class="chart-caption-bar">
+                    <span>الفرع الأيمن للخط $C_f$ للتابع $f(x) = \ln\left(\frac{x+2}{x}\right)$ على $]0, +\infty[$</span>
+                    <span class="badge">مقارب شاقولي $x=0$ | مقارب أفقي $y=0$</span>
+                </div>
+                <div class="chart-box"><canvas id="chartVar4"></canvas></div>
+            </div>
+        </div>
+
+        <!-- مسألة 5 -->
+        <div class="exam-block">
+            <div class="exam-question-title">مسألة 5 (100 درجة كاملة): دراسة تغيرات التابع $f(x) = \ln\left(\frac{x+1}{\ln x}\right)$ على $]1, +\infty[$ وحصر حل مبرهنة القيمة الوسطى</div>
+            <div class="exam-paper-text">
+                ليكن $f(x) = \ln\left(\frac{x+1}{\ln x}\right)$ على $]1, +\infty[$، والتابع المساعد $g(x) = x\ln x - x - 1$.<br>
+                1) ادرس تغيرات $g(x)$ وأثبت وجود حل وحيد للمعادلة $g(x) = 0$ ثم احصره في $]3.5, 3.6[$.<br>
+                2) احسب نهايات $f$ واكتب المقاربات.<br>
+                3) أثبت أن $f'(x) = \frac{g(x)}{x(x+1)\ln x}$ ونظم جدول التغيرات وارسم المنحني البياني.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-var-100-new')">عرض الحل النموذجي السلمي المفصل</button>
+            <div class="solution-drawer" id="sol-var-100-new">
+                • التابع المساعد: $g'(x) = \ln x > 0$ على $]1, +\infty[$، نهاياته: $\lim_{x \to 1^+} g(x) = -2$ و $\lim_{x \to +\infty} g(x) = +\infty$.<br>
+                بمبرهنة الصورة يوجد حل وحيد $\alpha \in ]1, +\infty[$.<br>
+                بما أن $g(3.5) \approx -0.115 < 0$ و $g(3.6) \approx +0.011 > 0$، فبحسب مبرهنة القيمة الوسطى $\alpha \in ]3.5, 3.6[$.<br>
+                • نهايات $f$: عند $1^+$ تسعى لـ $+\infty$ ($x=1$ مقارب شاقولي)، وعند $+\infty$ تسعى لـ $+\infty$.<br>
+                • المشتق: $f'(x) = \frac{g(x)}{x(x+1)\ln x}$ وإشارته تطابق $g(x)$.<br><br>
+                <b>جدول التغيرات أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>1</td><td></td><td>$\alpha$</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$f'(x)$</th><td style="background:#23080b">||</td><td>-</td><td>0</td><td>+</td><td></td></tr>
+                        <tr><th>$f(x)$</th><td style="background:#23080b">|| $+\infty$</td><td>$\searrow$</td><td>$f(\alpha)$</td><td>$\nearrow$</td><td>$+\infty$</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والاستنتاج:</div>
+                    - التابع متناقص تماماً على $]1, \alpha]$ ومتزايد تماماً على $[\alpha, +\infty[$.<br>
+                    - يقبل التابع قيمة صغرى محلياً وشاملة عند $x = \alpha \approx 3.59$.
+                </div>
+                <div class="chart-caption-bar">
+                    <span>التمثيل البياني للخط $C_f$ للتابع $f(x) = \ln\left(\frac{x+1}{\ln x}\right)$</span>
+                    <span class="badge">مقارب شاقولي $x=1$ | قيمة صغرى محلياً عند $(\alpha, f(\alpha))$</span>
+                </div>
+                <div class="chart-box"><canvas id="chartVarNew"></canvas></div>
+            </div>
+        </div>
+
+        <!-- مسألة 6 -->
+        <div class="exam-block">
+            <div class="exam-question-title">مسألة 6: التابع $f(x) = (x+1)\ln(x)$ والتابع المساعد $g(x) = \frac{x\ln x + x + 1}{x}$</div>
+            <div class="exam-paper-text">
+                ليكن $f(x) = (x+1)\ln(x)$ و $g(x) = \frac{x\ln x + x + 1}{x}$. ادرس اطراد $g$ ثم استنتج أن $g(x) > 0$. احسب نهايات $f$ وأثبت أن $f'(x) = g(x)$، ونظم جدول التغيرات وارسم الخط البياني.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-var-100-4')">عرض الحل والمنحني البياني</button>
+            <div class="solution-drawer" id="sol-var-100-4">
+                • دراسة $g$: $g'(x) = \frac{x-1}{x^2}$ ينعدم عند $1$، وقيمته الصغرى $g(1) = 2 > 0 \implies g(x) \ge 2 > 0$ دوماً.<br>
+                • المشتق: $f'(x) = \ln x + 1 + \frac{1}{x} = g(x) > 0$.<br>
+                • النهايات: $\lim_{x \to 0^+} f(x) = -\infty$ ($x = 0$ مقارب شاقولي) و $\lim_{x \to +\infty} f(x) = +\infty$.<br><br>
+                <b>جدول التغيرات أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>1</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$f'(x)$</th><td style="background:#23080b">||</td><td>+</td><td>2</td><td>+</td><td></td></tr>
+                        <tr><th>$f(x)$</th><td style="background:#23080b">|| $-\infty$</td><td>$\nearrow$</td><td>0</td><td>$\nearrow$</td><td>$+\infty$</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والاستنتاج:</div>
+                    - التابع متزايد تماماً على كامل مجموعة تعريفه $]0, +\infty[$.<br>
+                    - يقطع المنحني محور الفواصل عند النقطة $(1, 0)$ بميل مماس قدره $m = f'(1) = 2$.
+                </div>
+                <div class="chart-caption-bar">
+                    <span>التمثيل البياني للخط $C_f$ للتابع $f(x) = (x+1)\ln(x)$</span>
+                    <span class="badge">متزايد تماماً | يقطع محور الفواصل عند (1, 0)</span>
+                </div>
+                <div class="chart-box"><canvas id="chartVar7"></canvas></div>
+            </div>
+        </div>
+
+        <!-- مسألة 7 -->
+        <div class="exam-block">
+            <div class="exam-question-title">مسألة 7: دراسة تغيرات ورسم الحالات: $f(x) = \frac{1}{x(1-\ln x)}$ و $f(x) = x\ln x$ و $f(x) = \frac{\ln x}{x^2}$</div>
+            <div class="exam-paper-text">
+                دراسة تفصيلية ورسم بياني لكل تابع من التوابع الثلاثة مع المقاربات وجداول التغيرات كاملة أولاً ثم المناقشة.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-var-100-5')">عرض الحلول وجداول التغيرات والرسوم البيانية</button>
+            <div class="solution-drawer" id="sol-var-100-5">
+                <b>1) التابع $f(x) = \frac{1}{x(1-\ln x)}$:</b><br>
+                • $D_f = ]0, e[ \cup ]e, +\infty[$. المقاربات: $x=0, x=e$ مقاربان شاقوليان، و $y=0$ مقارب أفقي بجوار $+\infty$.<br>
+                • المشتق: $f'(x) = \frac{\ln x}{x^2(1-\ln x)^2}$ ينعدم عند $x = 1$، والقيمة الصغرى $f(1) = 1$.<br>
+                <b>جدول التغيرات أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>1</td><td></td><td>e</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$f'(x)$</th><td style="background:#23080b">||</td><td>-</td><td>0</td><td>+</td><td style="background:#23080b">||</td><td>+</td><td></td></tr>
+                        <tr><th>$f(x)$</th><td style="background:#23080b">|| $+\infty$</td><td>$\searrow$</td><td>1</td><td>$\nearrow$</td><td style="background:#23080b">|| $+\infty$ / $-\infty$</td><td>$\nearrow$</td><td>0</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والاستنتاج:</div>
+                    - على المجال $]0, e[$ يبلغ التابع قيمة صغرى محلياً هي $f(1) = 1$.<br>
+                    - على المجال $]e, +\infty[$ التابع متزايد تماماً ويبدأ من $-\infty$ مقترباً من الصفر.
+                </div>
+                <div class="chart-caption-bar">
+                    <span>التمثيل البياني لـ $f(x) = \frac{1}{x(1-\ln x)}$ على $]0, e[$</span>
+                    <span class="badge">قيمة صغرى عند (1, 1) | مقاربان شاقوليان $x=0$ و $x=e$</span>
+                </div>
+                <div class="chart-box"><canvas id="chartVar3"></canvas></div>
+                <br><br>
+
+                <b>2) التابع $f(x) = x\ln x$:</b><br>
+                • $D_f = ]0, +\infty[$. $\lim_{x \to 0^+} x\ln x = 0$ و $\lim_{x \to +\infty} x\ln x = +\infty$.<br>
+                • المشتق: $f'(x) = \ln x + 1$ ينعدم عند $x = 1/e$، وقيمته الصغرى $f(1/e) = -1/e$.<br>
+                <b>جدول التغيرات أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>$1/e$</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$f'(x)$</th><td style="background:#23080b">||</td><td>-</td><td>0</td><td>+</td><td></td></tr>
+                        <tr><th>$f(x)$</th><td>0</td><td>$\searrow$</td><td>$-1/e$</td><td>$\nearrow$</td><td>$+\infty$</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والاستنتاج:</div>
+                    - يبلغ التابع قيمة صغرى محلياً وشاملة عند $x = 1/e$ قدرها $-1/e \approx -0.368$.<br>
+                    - التابع متناقص تماماً على $]0, 1/e]$ ومتزايد تماماً على $[1/e, +\infty[$.
+                </div>
+                <div class="chart-caption-bar">
+                    <span>التمثيل البياني لـ $f(x) = x\ln x$</span>
+                    <span class="badge">قيمة صغرى عند $(e^{-1}, -e^{-1})$</span>
+                </div>
+                <div class="chart-box"><canvas id="chartVar5"></canvas></div>
+                <br><br>
+
+                <b>3) التابع $f(x) = \frac{\ln x}{x^2}$:</b><br>
+                • $D_f = ]0, +\infty[$. المقاربان: $x=0$ شاقولي، و $y=0$ أفقي.<br>
+                • المشتق: $f'(x) = \frac{1-2\ln x}{x^3}$ ينعدم عند $x = \sqrt{e}$، وقيمته الكبرى $f(\sqrt{e}) = \frac{1}{2e}$.<br>
+                <b>جدول التغيرات أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>$\sqrt{e}$</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$f'(x)$</th><td style="background:#23080b">||</td><td>+</td><td>0</td><td>-</td><td></td></tr>
+                        <tr><th>$f(x)$</th><td style="background:#23080b">|| $-\infty$</td><td>$\nearrow$</td><td>$\frac{1}{2e}$</td><td>$\searrow$</td><td>0</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والاستنتاج:</div>
+                    - يبلغ التابع قيمة كبرى محلياً وشاملة عند النقطة $(\sqrt{e}, \frac{1}{2e})$.<br>
+                    - يتزايد التابع من المقارب الشاقولي $x=0$ إلى الذروة، ثم يتناقص مسالماً للمقارب الأفقي $y=0$.
+                </div>
+                <div class="chart-caption-bar">
+                    <span>التمثيل البياني لـ $f(x) = \frac{\ln x}{x^2}$</span>
+                    <span class="badge">قيمة كبرى عند $(\sqrt{e}, \frac{1}{2e})$ | مقارب أفقي $y=0$</span>
+                </div>
+                <div class="chart-box"><canvas id="chartVar6"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== تبويب المعادلات والمتراجحات ==================== -->
+    <div id="tab-unified-eq" class="section-view">
+        <div class="section-header">
+            <h2>القسم الموحد: المعادلات والمتراجحات وجمل المعادلات (جداول الإشارة أولاً ثم المناقشة)</h2>
+            <span class="tag-pill">شامل جبر اللوغاريتم</span>
+        </div>
+
+        <!-- تمرين 1 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 1: حساب لوغاريتمي للنسبة a/b</div>
+            <div class="exam-paper-text">
+                بفرض $a > 0$ و $b > 0$ يحققان: $\ln\left(\frac{a+b}{3}\right) = \frac{\ln a + \ln b}{2}$.<br>
+                1) أثبت أن $\frac{1}{2}(\ln a + \ln b) = \ln\sqrt{ab}$.<br>
+                2) استنتج أن $a^2 + b^2 - 7ab = 0$.<br>
+                3) احسب قيمة النسبة $\frac{a}{b}$.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-img-ex1')">عرض الحل السلمي التفصيلي</button>
+            <div class="solution-drawer" id="sol-img-ex1">
+                • $\frac{1}{2}(\ln a + \ln b) = \frac{1}{2}\ln(ab) = \ln\sqrt{ab}$.<br>
+                • بالمساواة: $\frac{a+b}{3} = \sqrt{ab} \implies a+b = 3\sqrt{ab} \implies (a+b)^2 = 9ab \implies a^2 - 7ab + b^2 = 0$.<br>
+                • بقسمة المعادلة على $b^2$ ووضع $k = \frac{a}{b}$: $k^2 - 7k + 1 = 0 \implies \Delta = 49 - 4 = 45$.
+                <div class="ans-badge">$$k = \frac{a}{b} = \frac{7 \pm 3\sqrt{5}}{2}$$</div>
+            </div>
+        </div>
+
+        <!-- تمرين 2 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 2: إثبات متراجحة $\ln x \le x - 1$ وحصر العدد النيبري $e$</div>
+            <div class="exam-paper-text">
+                1) أثبت أنه أياً كان $x > 0$ فإن: $\ln x \le x - 1$.<br>
+                2) باختيار $x = e^{1/3}$ و $x = e^{-1/3}$ احصر العدد $e$.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-img-ex2')">عرض الحل والبرهان السلمي</button>
+            <div class="solution-drawer" id="sol-img-ex2">
+                • تابع الفرق: $h(x) = \ln x - x + 1 \implies h'(x) = \frac{1-x}{x}$. ينعدم عند $x = 1$.<br>
+                <b>جدول التغيرات أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>1</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$h'(x)$</th><td style="background:#23080b">||</td><td>+</td><td>0</td><td>-</td><td></td></tr>
+                        <tr><th>$h(x)$</th><td style="background:#23080b">|| $-\infty$</td><td>$\nearrow$</td><td>0</td><td>$\searrow$</td><td>$-\infty$</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والاستنتاج:</div>
+                    القيمة الكبرى الشاملة لتابع الفرق هي $h(1) = 0$، ومنه أياً كان $x > 0$ فإن $h(x) \le 0 \implies \ln x \le x - 1$.
+                </div>
+                <br>
+                • <b>حصر العدد $e$:</b><br>
+                - نعوض $x = e^{1/3}$: $\frac{1}{3} \le e^{1/3} - 1 \implies \frac{4}{3} \le e^{1/3} \implies e \ge \frac{64}{27}$.<br>
+                - نعوض $x = e^{-1/3}$: $-\frac{1}{3} \le e^{-1/3} - 1 \implies \frac{2}{3} \le \frac{1}{e^{1/3}} \implies e^{1/3} \le \frac{3}{2} \implies e \le \frac{27}{8}$.<br>
+                <div class="ans-badge">$$\frac{64}{27} \le e \le \frac{27}{8}$$</div>
+            </div>
+        </div>
+
+        <!-- تمرين 3 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 3: إثبات صحة المتراجحة اللوغاريتمية بالاعتماد على دراسة الاطراد التام</div>
+            <div class="exam-paper-text">
+                أثبت أنه أياً كان $x > 0$ فإن: $\ln(x+1) < x$ بدراسة اطراد تابع مساعد مناسب.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-ineq-mono')">عرض الحل والبرهان السلمي</button>
+            <div class="solution-drawer" id="sol-ineq-mono">
+                نعرف $h(x) = x - \ln(x+1)$ على $[0, +\infty[$. مشتقّه $h'(x) = 1 - \frac{1}{x+1} = \frac{x}{x+1} > 0$ لـ $x > 0$.<br>
+                <b>جدول الاطراد أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$h'(x)$</th><td>0</td><td>+</td><td></td></tr>
+                        <tr><th>$h(x)$</th><td>0</td><td>$\nearrow$</td><td>$+\infty$</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والاستنتاج:</div>
+                    بما أن $h(0) = 0$ والتابع $h$ متزايد تماماً على $[0, +\infty[$، فإنه أياً كان $x > 0$ يكون $h(x) > h(0) \implies x - \ln(x+1) > 0 \implies \ln(x+1) < x$.
+                </div>
+            </div>
+        </div>
+
+        <!-- تمرين 4 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 4: معادلة ومتراجحة من الدرجة الثانية بالنسبة لـ $\ln x$</div>
+            <div class="exam-paper-text">
+                1) حل في $\mathbb{R}$ المعادلة: $\ln^2(x) - 3\ln(x) + 2 = 0$.<br>
+                2) حل في $\mathbb{R}$ المتراجحة: $\ln^2(x) - 3\ln(x) + 2 \le 0$.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-eq-deg2')">عرض الحل النموذجي السلمي المفصل</button>
+            <div class="solution-drawer" id="sol-eq-deg2">
+                شرط الوجود: $x > 0 \implies D = ]0, +\infty[$. نضع $t = \ln x$ فتصبح: $t^2 - 3t + 2 = 0 \implies (t-1)(t-2) = 0$.<br>
+                • حلول المعادلة: $t=1 \implies x = e$، أو $t=2 \implies x = e^2$. إذن $S = \{e, \, e^2\}$.<br><br>
+                • <b>حل المتراجحة: جدول الإشارة أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$t$</th><td>$-\infty$</td><td></td><td>1</td><td></td><td>2</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>إشارة $t^2 - 3t + 2$</th><td></td><td>+</td><td>0</td><td>-</td><td>0</td><td>+</td><td></td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة واستنتاج حل المتراجحة:</div>
+                    المتراجحة تطلب القيم السالبة أو المعدومة، ومنه: $1 \le t \le 2 \iff 1 \le \ln x \le 2 \iff e \le x \le e^2$.
+                </div>
+                <div class="ans-badge">مجموعة حلول المتراجحة: $S = [e, \, e^2]$</div>
+            </div>
+        </div>
+
+        <!-- تمرين 5 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 5: المعادلة اللوغاريتمية الجذرية وتطبيق خواص القوى</div>
+            <div class="exam-paper-text">
+                حل في $\mathbb{R}$ المعادلة: $\ln\sqrt{2x-3} = \ln(6-x) - \frac{1}{2}\ln x$.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-eq-sqrt')">عرض الحل النموذجي السلمي المفصل</button>
+            <div class="solution-drawer" id="sol-eq-sqrt">
+                شرط الوجود: $2x-3>0 \implies x > 3/2$ و $6-x>0 \implies x<6$ و $x>0$. إذن: $D = ]3/2, 6[$.<br>
+                نضرب الطرفين بـ 2: $\ln(2x-3) + \ln x = 2\ln(6-x) \iff x(2x-3) = (6-x)^2$.<br>
+                $2x^2 - 3x = x^2 - 12x + 36 \implies x^2 + 9x - 36 = 0 \implies (x+12)(x-3) = 0$.<br>
+                - $x = -12 \notin D$ (مرفوض).<br>
+                - $x = 3 \in ]3/2, 6[$ (مقبول).
+                <div class="ans-badge">$S = \{3\}$</div>
+            </div>
+        </div>
+
+        <!-- تمرين 6 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 6: معادلات القيمة المطلقة اللوغاريتمية الثلاث</div>
+            <div class="exam-paper-text">
+                <b>1)</b> $\ln|2x+3| + \ln|x-1| = 2\ln|x|$<br>
+                <b>2)</b> $\ln|x-2| + \ln(x+4) = 3\ln(4)$<br>
+                <b>3)</b> $\ln|x-3| + \ln|x+3| = \ln(8x)$
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-eq-abs-all')">عرض الحلول المفصلة خطوة بخطوة</button>
+            <div class="solution-drawer" id="sol-eq-abs-all">
+                <b>1) المعادلة الأولى:</b> $|2x^2+x-3| = x^2$ بشرط $x \notin \{-3/2, 0, 1\}$.<br>
+                - إما $2x^2+x-3 = x^2 \implies x^2+x-3=0 \implies x = \frac{-1 \pm \sqrt{13}}{2}$.<br>
+                - أو $2x^2+x-3 = -x^2 \implies 3x^2+x-3=0 \implies x = \frac{-1 \pm \sqrt{37}}{6}$.<br>
+                <div class="ans-badge">$S_1 = \left\{ \frac{-1 \pm \sqrt{13}}{2}, \, \frac{-1 \pm \sqrt{37}}{6} \right\}$</div><br><br>
+
+                <b>2) المعادلة الثانية:</b> $|x-2|(x+4) = 64$ بشرط $x > -4$ و $x \ne 2$.<br>
+                - إذا كان $x > 2$: $(x-2)(x+4)=64 \implies x^2+2x-72=0 \implies (x-8)(x+10)=0 \implies x = 8$ (مقبول) و $x = -10$ (مرفوض).<br>
+                - إذا كان $-4 < x < 2$: $(2-x)(x+4)=64 \implies x^2+2x+56=0$ ($\Delta < 0$ مستحيلة).<br>
+                <div class="ans-badge">$S_2 = \{8\}$</div><br><br>
+
+                <b>3) المعادلة الثالثة:</b> $|x^2-9| = 8x$ بشرط $x > 0$ و $x \ne 3$.<br>
+                - $x^2 - 9 = 8x \implies x^2 - 8x - 9 = 0 \implies (x-9)(x+1) = 0 \implies x = 9$ (مقبول لأن $x>0$).<br>
+                - $x^2 - 9 = -8x \implies x^2 + 8x - 9 = 0 \implies (x+9)(x-1) = 0 \implies x = 1$ (مقبول لأن $x>0$).<br>
+                <div class="ans-badge">$S_3 = \{1, \, 9\}$</div>
+            </div>
+        </div>
+
+        <!-- تمرين 7 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 7: المتراجحة الكسرية ومتراجحات الأس الطبيعي $n$</div>
+            <div class="exam-paper-text">
+                <b>1)</b> $\frac{\ln(2x) - 1}{\ln(x)} \ge 0$<br>
+                <b>2)</b> $2^n \le 100$ و $\left(\frac{2}{3}\right)^n > 10^{-3}$ (مع $n \in \mathbb{N}$).
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-ineq-frac-n')">عرض الحل النموذجي المفصل</button>
+            <div class="solution-drawer" id="sol-ineq-frac-n">
+                شرط المتراجحة الكسرية: $x > 0$ و $x \ne 1 \implies D = ]0, 1[ \cup ]1, +\infty[$.<br>
+                ينعدم البسط عند $x = e/2 \approx 1.359$ وينعدم المقام عند $x = 1$.<br>
+                <b>جدول إشارة الكسر أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>1</td><td></td><td>e/2</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>البسط $\ln(2x)-1$</th><td style="background:#23080b">||</td><td>-</td><td>|</td><td>-</td><td>0</td><td>+</td><td></td></tr>
+                        <tr><th>المقام $\ln x$</th><td style="background:#23080b">||</td><td>-</td><td>0</td><td>+</td><td>|</td><td>+</td><td></td></tr>
+                        <tr><th>إشارة الكسر</th><td style="background:#23080b">||</td><td>+</td><td style="background:#23080b">||</td><td>-</td><td>0</td><td>+</td><td></td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والاستنتاج:</div>
+                    الكسر أكبر أو يساوي الصفر على المجالين الموجبين:
+                    <div class="ans-badge">$S = ]0, 1[ \cup \left[\frac{e}{2}, +\infty\right[$</div>
+                </div>
+                <br>
+                • <b>متراجحات $n$:</b><br>
+                - $2^n \le 100 \implies n \ln 2 \le \ln 100 \implies n \le \frac{\ln 100}{\ln 2} \approx 6.64 \implies n \in \{0, 1, 2, 3, 4, 5, 6\}$.<br>
+                - $\left(\frac{2}{3}\right)^n > 10^{-3} \implies n \ln(2/3) > -3\ln 10 \implies n < \frac{3\ln 10}{\ln 3 - \ln 2} \approx 17.03 \implies n \in \{0, 1, \dots, 17\}$.
+            </div>
+        </div>
+
+        <!-- تمرين 8 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 8: جمل المعادلات اللوغاريتمية</div>
+            <div class="exam-paper-text">
+                <b>الجملة 1:</b> $\begin{cases} x + y = 30 \\ \ln(x) + \ln(y) = 2\ln 3 + \ln 25 \end{cases}$<br>
+                <b>الجملة 2:</b> $\begin{cases} 3\ln x + 2\ln y = 8 \\ 2\ln x - 3\ln y = 1 \end{cases}$
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-systems')">عرض الحل النموذجي المفصل</button>
+            <div class="solution-drawer" id="sol-systems">
+                • <b>الجملة 1:</b> $\ln(xy) = \ln(9 \times 25) = \ln(225) \implies xy = 225$.<br>
+                معادلة المجموع والجداء: $t^2 - 30t + 225 = 0 \implies (t-15)^2 = 0 \implies t = 15$. الحل: $(x, y) = (15, 15)$.<br><br>
+                • <b>الجملة 2:</b> بوضع $X = \ln x$ و $Y = \ln y$: ينتج $X = 2$ و $Y = 1$. الحل: $(x, y) = (e^2, e)$.
+            </div>
+        </div>
+
+        <!-- تمرين 9 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 9: تحليل كثير الحدود $P(x)$ بالقسمة الإقليدية وربطه بالمتراجحة اللوغاريتمية</div>
+            <div class="exam-paper-text">
+                ليكن $P(x) = 2x^3 + 5x^2 + x - 2$.<br>
+                1) تحقق أن $(-1)$ جذر لـ $P(x)$، وأجرِ القسمة الإقليدية بالتفصيل وحلل $P(x)$ لجداء عوامل.<br>
+                2) حل في $\mathbb{R}$ المتراجحة $P(x) \ge 0$.<br>
+                3) استنتج حل المتراجحة: $2\ln x + \ln(2x+5) \ge \ln(2 - x)$.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-poly-ineq')">عرض خطوات الحل والقسمة الإقليدية بالتفصيل</button>
+            <div class="solution-drawer" id="sol-poly-ineq">
+                • التحقق: $P(-1) = 2(-1) + 5(1) - 1 - 2 = 0$.<br>
+                • خطوات القسمة الإقليدية:
+                <div class="division-box">
+  (2x^3 + 5x^2 + x - 2) ÷ (x + 1) = 2x^2 + 3x - 2<br>
+- (2x^3 + 2x^2)<br>
+------------------<br>
+          3x^2 + x - 2<br>
+        - (3x^2 + 3x)<br>
+        ----------------<br>
+                - 2x - 2<br>
+              - (- 2x - 2)<br>
+              ------------<br>
+                         0
+                </div>
+                التحليل الكامل: $P(x) = (x+1)(2x-1)(x+2)$.<br><br>
+                • <b>جدول دراسة إشارة $P(x)$ أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>$-\infty$</td><td></td><td>-2</td><td></td><td>-1</td><td></td><td>1/2</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$x+2$</th><td></td><td>-</td><td>0</td><td>+</td><td>|</td><td>+</td><td>|</td><td>+</td><td></td></tr>
+                        <tr><th>$x+1$</th><td></td><td>-</td><td>|</td><td>-</td><td>0</td><td>+</td><td>|</td><td>+</td><td></td></tr>
+                        <tr><th>$2x-1$</th><td></td><td>-</td><td>|</td><td>-</td><td>|</td><td>-</td><td>0</td><td>+</td><td></td></tr>
+                        <tr><th>$P(x)$</th><td></td><td>-</td><td>0</td><td>+</td><td>0</td><td>-</td><td>0</td><td>+</td><td></td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والاستنتاج:</div>
+                    - حل المتراجحة الجبرية $P(x) \ge 0$ هو: $S_1 = [-2, -1] \cup [1/2, +\infty[$.<br>
+                    - شرط المتراجحة اللوغاريتمية: $x > 0$ و $2x+5 > 0$ و $2-x > 0 \implies D = ]0, 2[$.<br>
+                    - بالخواص تكافئ المتراجحة اللوغاريتمية: $P(x) \ge 0$.<br>
+                    - بمقاطعة $S_1$ مع مجال الوجود $D = ]0, 2[$ نجد:
+                    <div class="ans-badge">$S = [1/2, \, 2[$</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== قسم الأوضاع النسبية والمقاربات ==================== -->
+    <div id="tab-rel-pos-tables" class="section-view">
+        <div class="section-header">
+            <h2>الأوضاع النسبية والمقاربات والمماسات (جداول اطراد وإشارة الفرق $h(x)$ أولاً ثم المناقشة)</h2>
+            <span class="tag-pill">جداول الفرق والمناقشة السلمية</span>
+        </div>
+
+        <!-- تمرين 1 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 1: $f(x) = 2x - \frac{\ln x}{x}$ على $I = ]0, +\infty[$ ودراسة إشارة الفرق $h(x)$</div>
+            <div class="exam-paper-text">
+                أثبت أن المستقيم $\Delta: y = 2x$ مقارب مائل للخط $C_f$ في جوار $+\infty$، و<b>ادرس إشارة الفرق $h(x) = f(x) - y_{\Delta}$</b> لتحديد الوضع النسبي لـ $C_f$ مع $\Delta$ عبر تنظيم جدول الإشارة أولاً متبوعاً بالمناقشة.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-rel-pos-1')">عرض الحل والجدول كاملاً</button>
+            <div class="solution-drawer" id="sol-rel-pos-1">
+                • $h(x) = f(x) - y_{\Delta} = -\frac{\ln x}{x}$. بما أن $\lim_{x \to +\infty} \frac{\ln x}{x} = 0 \implies \lim_{x \to +\infty} h(x) = 0$، فالمستقيم $\Delta$ مقارب مائل بجوار $+\infty$.<br>
+                • بما أن المقام $x > 0$ دوماً، فإن إشارة الكسر مطابقة لإشارة البسط $-\ln x$. ينعدم عند $x = 1$.<br><br>
+                <b>جدول إشارة الفرق والوضع النسبي أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>1</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$-\ln x$</th><td style="background:#23080b">||</td><td>+</td><td>0</td><td>-</td><td></td></tr>
+                        <tr><th>$x$</th><td style="background:#23080b">||</td><td>+</td><td>|</td><td>+</td><td></td></tr>
+                        <tr><th>$h(x) = f(x) - y_{\Delta}$</th><td style="background:#23080b">||</td><td>+</td><td>0</td><td>-</td><td></td></tr>
+                        <tr><th><span class="ar-txt">الوضع النسبي</span></th><td style="background:#23080b">||</td><td><span class="ar-txt">الخط $C_f$ يقع فوق المقارب $\Delta$</span></td><td><span class="ar-txt">نقطة التقاطع $(1, 2)$</span></td><td><span class="ar-txt">الخط $C_f$ يقع تحت المقارب $\Delta$</span></td><td></td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والتحليل الاستنتاجي من الجدول:</div>
+                    1. على المجال $]0, 1[$: الفرق موجب تماماً ($h(x) > 0$)، وبالتالي الخط البياني $C_f$ يقع <b>فوق</b> المقارب المائل $\Delta$.<br>
+                    2. عند $x = 1$: ينعدم الفرق ($h(1) = 0$)، وبالتالي الخط $C_f$ <b>يقطع</b> المقارب المائل $\Delta$ في النقطة المشتركة ذات الإحداثيات $(1, 2)$ لأن $y_{\Delta}(1) = 2(1) = 2$.<br>
+                    3. على المجال $]1, +\infty[$: الفرق سالب تماماً ($h(x) < 0$)، وبالتالي الخط البياني $C_f$ يقع <b>تحت</b> المقارب المائل $\Delta$.
+                </div>
+            </div>
+        </div>
+
+        <!-- تمرين 2 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 2: $f(x) = \ln\left(\frac{x+1}{1-x}\right)$ على $I = ]-1, 1[$ ودراسة إشارة واطراد الفرق $h(x)$ مع المماس في المبدأ</div>
+            <div class="exam-paper-text">
+                أوجد معادلة المماس $(T)$ للخط $C_f$ في المبدأ $O(0, 0)$، وادرس الوضع النسبي لـ $C_f$ مع المماس $(T)$ بتنظيم جدول لاطراد وإشارة تابع الفرق $h(x)$ أولاً ثم المناقشة.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-rel-pos-2')">عرض الحل والجدول كاملاً</button>
+            <div class="solution-drawer" id="sol-rel-pos-2">
+                • $f(0) = 0$. المشتق: $f'(x) = \frac{2}{1-x^2} \implies f'(0) = 2$. معادلة المماس في المبدأ: $(T): y = 2x$.<br>
+                • تابع الفرق: $h(x) = f(x) - 2x$. مشتقه:
+                $$h'(x) = \frac{2}{1-x^2} - 2 = \frac{2x^2}{1-x^2}$$
+                المشتق موجب تماماً على المجال عدا عند $x=0$ حيث ينعدم، فالتابع $h$ متزايد تماماً وينعدم عند $x = 0$.<br><br>
+                <b>جدول اطراد وإشارة الفرق والوضع النسبي أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>-1</td><td></td><td>0</td><td></td><td>1</td></tr>
+                        <tr><th>$h'(x)$</th><td style="background:#23080b">||</td><td>+</td><td>0</td><td>+</td><td style="background:#23080b">||</td></tr>
+                        <tr><th>$h(x)$</th><td style="background:#23080b">|| $-\infty$</td><td>$\nearrow$</td><td>0</td><td>$\nearrow$</td><td style="background:#23080b">|| $+\infty$</td></tr>
+                        <tr><th>إشارة $h(x)$</th><td style="background:#23080b">||</td><td>-</td><td>0</td><td>+</td><td style="background:#23080b">||</td></tr>
+                        <tr><th><span class="ar-txt">الوضع النسبي</span></th><td style="background:#23080b">||</td><td><span class="ar-txt">الخط $C_f$ يقع تحت المماس $(T)$</span></td><td><span class="ar-txt">نقطة تماس في المبدأ $O(0, 0)$</span></td><td><span class="ar-txt">الخط $C_f$ يقع فوق المماس $(T)$</span></td><td style="background:#23080b">||</td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والتحليل الاستنتاجي من الجدول:</div>
+                    1. بما أن التابع متزايد تماماً وينعدم عند الصفر فقط ($h(0) = 0$)، فإن $h(x) < 0$ عندما $x < 0$ و $h(x) > 0$ عندما $x > 0$.<br>
+                    2. على المجال $]-1, 0[$: الفرق سالب، فالخط $C_f$ يقع <b>تحت</b> المماس $(T)$.<br>
+                    3. عند $x = 0$: الخط $C_f$ يمس المستقيم $(T)$ في المبدأ $O(0, 0)$. وبما أن إشارة الفرق تتغير قبل وبعد نقطة التماس، فإن المبدأ $O(0, 0)$ يمثل <b>نقطة انعطاف</b> للمنحني يخترق فيها المماس الخط البياني.<br>
+                    4. على المجال $]0, 1[$: الفرق موجب، فالخط $C_f$ يقع <b>فوق</b> المماس $(T)$.
+                </div>
+            </div>
+        </div>
+
+        <!-- تمرين 3 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 3: $f(x) = x + 1 + \ln\left(\frac{x}{x-2}\right)$ على $I = ]2, +\infty[$ ودراسة الفرق $h(x)$</div>
+            <div class="exam-paper-text">
+                أثبت أن المستقيم $\Delta: y = x + 1$ مقارب مائل للخط $C_f$ بجوار $+\infty$، وادرس الوضع النسبي لـ $C_f$ مع $\Delta$ بجدول اطراد وإشارة تابع الفرق $h(x)$ أولاً ثم المناقشة.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-rel-pos-3')">عرض الحل والجدول كاملاً</button>
+            <div class="solution-drawer" id="sol-rel-pos-3">
+                • $h(x) = f(x) - y_{\Delta} = \ln\left(\frac{x}{x-2}\right)$. بما أن $\lim_{x \to +\infty} \frac{x}{x-2} = 1 \implies \lim_{x \to +\infty} h(x) = \ln(1) = 0$، فالمستقيم $\Delta$ مقارب مائل.<br>
+                • المشتق: $h'(x) = \frac{-2}{x(x-2)} < 0$ على المجال $]2, +\infty[$، فالفرق متناقص تماماً نحو الصفر، وقيمه موجبة دوماً.<br><br>
+                <b>جدول اطراد وإشارة الفرق أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>2</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$h'(x)$</th><td style="background:#23080b">||</td><td>-</td><td></td></tr>
+                        <tr><th>$h(x)$</th><td style="background:#23080b">|| $+\infty$</td><td>$\searrow$</td><td>0</td></tr>
+                        <tr><th>إشارة $h(x)$</th><td style="background:#23080b">||</td><td>+</td><td></td></tr>
+                        <tr><th><span class="ar-txt">الوضع النسبي</span></th><td style="background:#23080b">||</td><td colspan="2"><span class="ar-txt">الخط $C_f$ يقع بأكمله <b>فوق</b> المقارب $\Delta$</span></td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والتحليل الاستنتاجي من الجدول:</div>
+                    بما أن تابع الفرق $h(x)$ متناقص تماماً من $+\infty$ ويسعى إلى الصفر دون أن يبلغه، فإن $h(x) > 0$ تماماً لجميع قيم $x \in ]2, +\infty[$، وبالتالي فإن الخط البياني $C_f$ يقع بأكمله <b>فوق</b> المقارب المائل $\Delta$ ولا يقطعه في أية نقطة.
+                </div>
+            </div>
+        </div>
+
+        <!-- تمرين 4 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 4: المماس المشترك ودراسة الفرق $h(x)$ بين $f(x) = \ln x$ والمماس $y = x - 1$</div>
+            <div class="exam-paper-text">
+                1) أثبت أن الخطين البيانيين لـ $f(x) = \ln x$ و $g(x) = 2\sqrt{x} - 2$ يقبلان مماساً مشتركاً $(T)$ عند $x_0 = 1$ واكتب معادلته.<br>
+                2) ادرس الوضع النسبي للخط $C_f$ مع المماس $(T)$ بتنظيم جدول لاطراد وإشارة تابع الفرق $h(x)$ أولاً ثم المناقشة.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-rel-pos-4')">عرض الحل والجدول كاملاً</button>
+            <div class="solution-drawer" id="sol-rel-pos-4">
+                • $f(1) = g(1) = 0$ (نقطة تماس مشتركة $A(1, 0)$).<br>
+                • $f'(1) = 1$ و $g'(1) = 1$ (تساوي الميول). معادلة المماس المشترك: $(T): y = x - 1$.<br>
+                • تابع الفرق: $h(x) = \ln x - x + 1 \implies h'(x) = \frac{1-x}{x}$ ينعدم عند $x = 1$.<br><br>
+                <b>جدول اطراد وإشارة الفرق والوضع النسبي أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>1</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$h'(x)$</th><td style="background:#23080b">||</td><td>+</td><td>0</td><td>-</td><td></td></tr>
+                        <tr><th>$h(x)$</th><td style="background:#23080b">|| $-\infty$</td><td>$\nearrow$</td><td>0 (قيمة كبرى محلياً)</td><td>$\searrow$</td><td>$-\infty$</td></tr>
+                        <tr><th>إشارة $h(x)$</th><td style="background:#23080b">||</td><td>-</td><td>0</td><td>-</td><td></td></tr>
+                        <tr><th><span class="ar-txt">الوضع النسبي</span></th><td style="background:#23080b">||</td><td><span class="ar-txt">الخط $C_f$ يقع تحت المماس $(T)$</span></td><td><span class="ar-txt">نقطة تماس $(1, 0)$</span></td><td><span class="ar-txt">الخط $C_f$ يقع تحت المماس $(T)$</span></td><td></td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والتحليل الاستنتاجي من الجدول:</div>
+                    1. يبلغ تابع الفرق قيمة كبرى محلياً وشاملة عند $x = 1$ هي $h(1) = 0$.<br>
+                    2. إشارة الفرق سالبة دوماً ($h(x) \le 0$) وتنعدم فقط عند نقطة التماس $(1, 0)$.<br>
+                    3. وبالتالي: الخط البياني $C_f$ يقع بأكمله <b>تحت</b> المماس المشترك $(T)$ على كامل المجال $]0, +\infty[$ ويمسه في النقطة المشتركة $A(1, 0)$ دون أن يخترقه.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== قسم النهايات وإزالة عدم التعيين ==================== -->
+    <div id="tab-limits-indet" class="section-view">
+        <div class="section-header">
+            <h2>إزالة حالات عدم التعيين وحساب النهايات (بالتفكيك والتبسيط السلمي المعتمد)</h2>
+            <span class="tag-pill">تمارين النهايات</span>
+        </div>
+
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين: حساب النهايات مع التعليل الرياضي الدقيق وتغيير المتحول المعتمد</div>
+            <div class="exam-paper-text">
+                احسب النهايات الآتية مع إزالة عدم التعيين والتعليل المفصل:<br>
+                1) $\lim_{x \to +\infty} \left[\ln(2x+1) - \ln(x)\right]$<br>
+                2) $\lim_{x \to +\infty} \left[2x \ln\left(1 + \frac{1}{2x}\right)\right]$<br>
+                3) $\lim_{x \to +\infty} \frac{\ln(x)}{x^2}$ (بالتفكيك وفق $\lim_{x \to +\infty}\frac{\ln x}{x} = 0$)<br>
+                4) $\lim_{x \to +\infty} \frac{2 + \ln(x)}{3 + 4\ln(x)}$<br>
+                5) $\lim_{x \to 0^+} \left[\sqrt{x}\ln(x)\right]$<br>
+                6) $\lim_{x \to +\infty} \left[\ln(x) - x\right]$<br>
+                7) $\lim_{x \to 0} \frac{\ln(1+3x)}{\sin(2x)}$
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-limits-all')">عرض خطوات الحل المفصلة</button>
+            <div class="solution-drawer" id="sol-limits-all">
+                <div class="step-title">1) $\lim_{x \to +\infty} [\ln(2x+1) - \ln x]$:</div>
+                حالة $[\infty - \infty]$. نحول الفرق إلى كسر:
+                $$\lim_{x \to +\infty} \ln\left(\frac{2x+1}{x}\right) = \lim_{x \to +\infty} \ln\left(2 + \frac{1}{x}\right) = \ln(2 + 0) = \ln 2$$
+
+                <div class="step-title" style="margin-top:14px;">2) $\lim_{x \to +\infty} \left[2x \ln\left(1 + \frac{1}{2x}\right)\right]$:</div>
+                حالة $[\infty \times 0]$. نضع $t = \frac{1}{2x} \implies 2x = \frac{1}{t}$. عندما $x \to +\infty$ فإن $t \to 0^+$:
+                $$\lim_{t \to 0^+} \frac{\ln(1+t)}{t} = 1$$
+
+                <div class="step-title" style="margin-top:14px;">3) $\lim_{x \to +\infty} \frac{\ln x}{x^2}$ بالتفكيك السلمي المعتمد:</div>
+                نفكك الكسر:
+                $$\lim_{x \to +\infty} \frac{\ln x}{x^2} = \lim_{x \to +\infty} \left(\frac{1}{x} \cdot \frac{\ln x}{x}\right) = 0 \cdot 0 = 0$$
+
+                <div class="step-title" style="margin-top:14px;">4) $\lim_{x \to +\infty} \frac{2 + \ln x}{3 + 4\ln x}$:</div>
+                نخرج $\ln x$ عاملاً مشتركاً من البسط والمقام:
+                $$\lim_{x \to +\infty} \frac{\ln x \left(\frac{2}{\ln x} + 1\right)}{\ln x \left(\frac{3}{\ln x} + 4\right)} = \frac{0 + 1}{0 + 4} = \frac{1}{4}$$
+
+                <div class="step-title" style="margin-top:14px;">5) $\lim_{x \to 0^+} [\sqrt{x}\ln x]$:</div>
+                نضع $t = \sqrt{x} \iff x = t^2$. عندما $x \to 0^+$ فإن $t \to 0^+$:
+                $$\lim_{x \to 0^+} \sqrt{x}\ln x = \lim_{t \to 0^+} t \ln(t^2) = 2 \lim_{t \to 0^+} (t \ln t) = 2(0) = 0$$
+
+                <div class="step-title" style="margin-top:14px;">6) $\lim_{x \to +\infty} [\ln(x) - x]$:</div>
+                نخرج $x$ عاملاً مشتركاً:
+                $$\lim_{x \to +\infty} x \left(\frac{\ln x}{x} - 1\right) = (+\infty)(0 - 1) = -\infty$$
+
+                <div class="step-title" style="margin-top:14px;">7) $\lim_{x \to 0} \frac{\ln(1+3x)}{\sin(2x)}$:</div>
+                نقسم البسط والمقام على $x$:
+                $$\lim_{x \to 0} \frac{3 \cdot \frac{\ln(1+3x)}{3x}}{2 \cdot \frac{\sin(2x)}{2x}} = \frac{3(1)}{2(1)} = \frac{3}{2}$$
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== قسم الاستمرار وقابلية الاشتقاق والتقريب التآلفي ==================== -->
+    <div id="tab-deriv-cont-app" class="section-view">
+        <div class="section-header">
+            <h2>الاستمرار وقابلية الاشتقاق والتقريب التآلفي المحلي</h2>
+            <span class="tag-pill">تفاضل وتحليل</span>
+        </div>
+
+        <!-- تمرين 1 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 1: دراسة استمرار واشتقاق التابع $f(x) = \frac{x}{x - \ln x}$ عند الصفر والمماس الأفقي</div>
+            <div class="exam-paper-text">
+                ليكن $f(x) = \frac{x}{x - \ln x}$ لـ $x > 0$ و $f(0) = 0$.<br>
+                1) أثبت أن التابع مستمر عند الصفر من اليمين.<br>
+                2) ادرس قابلية اشتقاق التابع عند الصفر من اليمين وفسر النتيجة هندسياً.<br>
+                3) بيّن أن $y = 1$ مقارب أفقي بجوار $+\infty$.<br>
+                4) اكتب معادلة المماس عند $x = 1$ واحسب بالتقريب التآلفي قيمة $f(1.1)$.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-cont-1')">عرض الحل النموذجي المفصل</button>
+            <div class="solution-drawer" id="sol-cont-1">
+                • الاستمرار: $\lim_{x \to 0^+} f(x) = \frac{0}{0 - (-\infty)} = \frac{0}{+\infty} = 0 = f(0)$، فالتابع مستمر عند الصفر من اليمين.<br>
+                • الاشتقاق:
+                $$\lim_{x \to 0^+} \frac{f(x) - f(0)}{x - 0} = \lim_{x \to 0^+} \frac{1}{x - \ln x} = \frac{1}{+\infty} = 0$$
+                التابع اشتقاقي عند الصفر من اليمين و $f'_d(0) = 0$. التفسير الهندسي: يقبل المنحني عند المبدأ <b>مماس أفقي</b> ممتداً باتجاه اليمين.<br>
+                • المقارب الأفقي: $\lim_{x \to +\infty} \frac{1}{1 - \frac{\ln x}{x}} = \frac{1}{1-0} = 1 \implies y = 1$ مقارب أفقي بجوار $+\infty$.<br>
+                • المماس عند $x = 1$: $f(1) = 1$ و $f'(1) = 1 \implies (T): y = x$.<br>
+                • التقريب التآلفي: $f(1.1) \approx f(1) + 0.1 \cdot f'(1) = 1 + 0.1(1) = 1.1$.
+            </div>
+        </div>
+
+        <!-- تمرين 2 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 2: دراسة استمرار واشتقاق التابع $f(x) = x^2(1 - \ln x)$ والمماس الأفقي والتقريب</div>
+            <div class="exam-paper-text">
+                ليكن $f(x) = x^2(1 - \ln x)$ لـ $x > 0$ و $f(0) = 0$. ادرس استمرار واشتقاق التابع عند الصفر وأوجد معادلة المماس عند $x=1$ والتقريب التآلفي لـ $f(1.1)$.
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-cont-2')">عرض الحل النموذجي المفصل</button>
+            <div class="solution-drawer" id="sol-cont-2">
+                • الاستمرار: $\lim_{x \to 0^+} [x^2 - x(x\ln x)] = 0 - 0 = 0 = f(0)$، فالتابع مستمر عند الصفر من اليمين.<br>
+                • الاشتقاق: $\lim_{x \to 0^+} \frac{x^2(1 - \ln x)}{x} = \lim_{x \to 0^+} [x - x\ln x] = 0 = f'_d(0)$. يقبل المنحني عند المبدأ <b>مماس أفقي</b>.<br>
+                • المماس عند $x = 1$: $f(1) = 1$، $f'(x) = x(1 - 2\ln x) \implies f'(1) = 1 \implies (T): y = x$.<br>
+                • التقريب التآلفي: $f(1.1) \approx 1 + 0.1(1) = 1.1$.
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== مجموعات نقاط المستوي والتبسيط ==================== -->
+    <div id="tab-points-geom" class="section-view">
+        <div class="section-header">
+            <h2>مجموعات نقاط المستوي (رسوم مستقلة ثابتة)، التبسيط، وإثبات التدريج</h2>
+            <span class="tag-pill">هندسة وتحليل</span>
+        </div>
+
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 1: مجموعات نقاط المستوي $M(x, y)$ مع رسم بياني مستقل وثابت لكل حالة</div>
+            <div class="exam-paper-text">
+                عيّن وارسم طبيعة مجموعة النقاط $M(x, y)$ في الحالات التالية برسم مستقل لكل حالة:<br>
+                <b>الحالة I:</b> $\ln(x) = \ln(y+1)$<br>
+                <b>الحالة II:</b> $\ln(y) = -\ln(x)$<br>
+                <b>الحالة III:</b> $2\ln(-x) = \ln(y)$
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-points-all')">عرض الحل والتمثيلات البيانية المستقلة</button>
+            <div class="solution-drawer" id="sol-points-all">
+                <div class="step-title">الحالة I: $\ln(x) = \ln(y+1)$</div>
+                • شرط الوجود: $x > 0$ و $y > -1$. المعادلة: $y = x - 1$.<br>
+                • <b>طبيعة المجموعة:</b> <b>نصف مستقيم</b> من المستقيم $y = x - 1$ مع الشرط $x > 0$ (مفتوح عند النقطة $(0, -1)$ ويمتد باتجاه $x > 0$).
+                <div class="chart-caption-bar">
+                    <span>الحالة I: نصف المستقيم $y = x - 1$ بشرط $x > 0$</span>
+                    <span class="badge">دائرة مفرغة عند (0, -1)</span>
+                </div>
+                <div class="chart-box" style="height: 330px;"><canvas id="chartPtsCase1"></canvas></div>
+
+                <div class="step-title" style="margin-top:20px;">الحالة II: $\ln(y) = -\ln(x)$</div>
+                • شرط الوجود: $x > 0$ و $y > 0$ (الربع الأول). المعادلة: $y = 1/x$.<br>
+                • <b>طبيعة المجموعة:</b> <b>فرع القطع الزائد</b> المتواجد في الربع الأول مع مقاربيه الإحداثيين $x=0$ و $y=0$.
+                <div class="chart-caption-bar">
+                    <span>الحالة II: فرع القطع الزائد $y = 1/x$ في الربع الأول</span>
+                    <span class="badge">المقاربان: محورا الإحداثيات $x=0$ و $y=0$</span>
+                </div>
+                <div class="chart-box" style="height: 330px;"><canvas id="chartPtsCase2"></canvas></div>
+
+                <div class="step-title" style="margin-top:20px;">الحالة III: $2\ln(-x) = \ln(y)$</div>
+                • شرط الوجود: $-x > 0 \implies x < 0$ و $y > 0$ (الربع الثاني). المعادلة: $y = x^2$.<br>
+                • <b>طبيعة المجموعة:</b> <b>نصف القطع المكافئ</b> $y = x^2$ الواقع في الربع الثاني مع استثناء مبدأ الإحداثيات $(0, 0)$ كدائرة مفرغة.
+                <div class="chart-caption-bar">
+                    <span>الحالة III: نصف القطع المكافئ $y = x^2$ في الربع الثاني ($x < 0$)</span>
+                    <span class="badge">دائرة مفرغة عند النقطة المستثناة (0, 0)</span>
+                </div>
+                <div class="chart-box" style="height: 340px;"><canvas id="chartPtsCase3"></canvas></div>
+            </div>
+        </div>
+
+        <!-- تمرين 2 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 2: إثبات مجموع المتتالية $S_n$ بالتدريج الرياضي الكامل</div>
+            <div class="exam-paper-text">
+                لتكن $u_n = \ln\left(\frac{n+2}{n}\right)$. أثبت بالتدريج الرياضي أنه أياً كان $n \ge 1$ فإن:
+                $$S_n = u_1 + \dots + u_n = \ln\left[\frac{(n+2)(n+1)}{2}\right]$$
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-induct-seq')">عرض خطوات الإثبات بالتدريج كاملة</button>
+            <div class="solution-drawer" id="sol-induct-seq">
+                1) من أجل $n = 1$: $S_1 = u_1 = \ln(3)$، والطرف الأيمن $\ln\left[\frac{3 \times 2}{2}\right] = \ln 3$ (محققة).<br>
+                2) نفرض صحة القضية من أجل $n$: $S_n = \ln\left[\frac{(n+2)(n+1)}{2}\right]$.<br>
+                3) نثبت صحتها من أجل $n+1$:
+                $$S_{n+1} = S_n + u_{n+1} = \ln\left[\frac{(n+2)(n+1)}{2}\right] + \ln\left[\frac{n+3}{n+1}\right] = \ln\left[\frac{(n+2)(n+1)}{2} \times \frac{n+3}{n+1}\right] = \ln\left[\frac{(n+3)(n+2)}{2}\right]$$
+                فالقضية صحيحة من أجل $n+1$ ومحققة أياً كان $n \ge 1$.
+            </div>
+        </div>
+
+        <!-- تمرين 3 -->
+        <div class="exam-block">
+            <div class="exam-question-title">تمرين 3: تبسيط المقادير النيبرية والعشرية</div>
+            <div class="exam-paper-text">
+                احسب وبسّط:
+                $$A = \ln(e^2\sqrt{e}) - \ln(e^3) + \ln\left(\frac{e^4}{\sqrt{e}}\right)$$
+                $$B = \ln(432) - \ln(54) - \ln\left(\frac{4}{3}\right) + \ln\left(\frac{1}{12}\right)$$
+                $$C = \ln^3\left(\frac{1}{e}\right) + \left(\ln\frac{1}{e}\right)^2 + \log_{10}(100) - 2$$
+            </div>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-simplify-all')">عرض التبسيط الحسابي</button>
+            <div class="solution-drawer" id="sol-simplify-all">
+                • $A = \frac{5}{2} - 3 + \frac{7}{2} = 6 - 3 = 3$.<br>
+                • $B = \ln\left(\frac{432 \times \frac{1}{12}}{54 \times \frac{4}{3}}\right) = \ln\left(\frac{36}{72}\right) = \ln(1/2) = -\ln 2$.<br>
+                • $C = (-1)^3 + (-1)^2 + 2 - 2 = -1 + 1 + 0 = 0$.
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const chartInstances = {};
+
+function printBank() {
+    document.querySelectorAll('.solution-drawer').forEach(d => d.classList.add('open'));
+    if (window.MathJax) {
+        MathJax.typesetPromise().then(() => window.print());
+    } else {
+        window.print();
+    }
+}
+
+function showTab(evt, tabId) {
+    document.querySelectorAll('.section-view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+    
+    const targetTab = document.getElementById(tabId);
+    targetTab.classList.add('active');
+    evt.currentTarget.classList.add('active');
+    
+    setTimeout(() => {
+        Object.values(chartInstances).forEach(chart => {
+            if (chart && typeof chart.resize === 'function') {
+                chart.resize();
+                chart.update('none');
+            }
+        });
+    }, 120);
+
+    if (window.MathJax) {
+        MathJax.typesetPromise([targetTab]);
+    }
+}
+
+function toggleSol(drawerId) {
+    const el = document.getElementById(drawerId);
+    el.classList.toggle('open');
+    if (window.MathJax && el.classList.contains('open')) {
+        MathJax.typesetPromise([el]);
+    }
+    setTimeout(() => {
+        const canvases = el.querySelectorAll('canvas');
+        canvases.forEach(canvas => {
+            const chart = Chart.getChart(canvas);
+            if (chart) {
+                chart.resize();
+                chart.update('none');
+            }
+        });
+    }, 120);
+}
+
+function checkMCQ(qId, optIdx, isCorrect) {
+    const card = document.getElementById('mcq-' + qId);
+    const opts = card.querySelectorAll('.mcq-opt');
+    const fb = document.getElementById('fb-' + qId);
+
+    opts.forEach(o => o.classList.remove('selected-correct', 'selected-wrong'));
+
+    if (isCorrect) {
+        opts[optIdx].classList.add('selected-correct');
+        fb.style.display = 'block';
+        fb.style.color = '#00e676';
+        fb.innerText = '✓ إجابة صحيحة وممتازة!';
+    } else {
+        opts[optIdx].classList.add('selected-wrong');
+        fb.style.display = 'block';
+        fb.style.color = '#ff3344';
+        fb.innerText = '✗ إجابة غير صحيحة، حاول مجدداً.';
+    }
+}
+
+const studentChartOptions = (xTitle, yTitle, yMin, yMax) => ({
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            labels: {
+                color: '#ffffff',
+                font: { family: 'Cairo', size: 13.5, weight: 'bold' }
+            }
+        },
+        tooltip: {
+            backgroundColor: '#111317',
+            titleColor: '#ffd700',
+            bodyColor: '#ffffff',
+            borderColor: '#ffd700',
+            borderWidth: 1
+        }
+    },
+    scales: {
+        x: {
+            title: { display: true, text: xTitle, color: '#ffd700', font: { family: 'Cairo', size: 14, weight: 'bold' } },
+            ticks: { color: '#ffffff', font: { family: 'Cairo', size: 12, weight: '600' } },
+            grid: { color: '#272c38', lineWidth: 1.2 }
+        },
+        y: {
+            title: { display: true, text: yTitle, color: '#ffd700', font: { family: 'Cairo', size: 14, weight: 'bold' } },
+            ticks: { color: '#ffffff', font: { family: 'Cairo', size: 12, weight: '600' } },
+            min: yMin,
+            max: yMax,
+            grid: { color: '#272c38', lineWidth: 1.2 }
+        }
+    }
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    const ctx1 = document.getElementById('chartVar1');
+    if (ctx1) {
+        const xV1 = [], yV1 = [], yAsym1 = [];
+        for (let x = 0.35; x <= 4.5; x += 0.08) {
+            xV1.push(x.toFixed(2));
+            yV1.push((1 + 2 * Math.log(x)) / (x * x));
+            yAsym1.push(0);
+        }
+        chartInstances['c1'] = new Chart(ctx1.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: xV1,
+                datasets: [
+                    { label: 'المنحني البياني f(x)', data: yV1, borderColor: '#ffd700', borderWidth: 3.5, fill: false, pointRadius: 0 },
+                    { label: 'المقارب الأفقي y = 0', data: yAsym1, borderColor: '#ff3344', borderWidth: 2.2, borderDash: [6, 4], fill: false, pointRadius: 0 }
+                ]
+            },
+            options: studentChartOptions('محور الفواصل x', 'محور التراتيب y', -1.5, 2.0)
+        });
+    }
+
+    const ctx2 = document.getElementById('chartVar2');
+    if (ctx2) {
+        const xV2 = [], yV2 = [];
+        for (let x = 0.1; x <= 5.5; x += 0.1) {
+            xV2.push(x.toFixed(2));
+            yV2.push((2 + Math.log(x)) / (x + 1));
+        }
+        chartInstances['c2'] = new Chart(ctx2.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: xV2,
+                datasets: [
+                    { label: 'المنحني البياني f(x)', data: yV2, borderColor: '#ffd700', borderWidth: 3.5, fill: false, pointRadius: 0 },
+                    { label: 'المقارب الأفقي y = 0', data: Array(xV2.length).fill(0), borderColor: '#ff3344', borderWidth: 2.2, borderDash: [6, 4], fill: false, pointRadius: 0 }
+                ]
+            },
+            options: studentChartOptions('محور الفواصل x', 'محور التراتيب y', -2.0, 1.6)
+        });
+    }
+
+    const ctxIVT = document.getElementById('chartVarIVT');
+    if (ctxIVT) {
+        const xVIVT = [], yVIVT = [];
+        for (let x = 0.5; x <= 3.5; x += 0.1) {
+            xVIVT.push(x.toFixed(2));
+            yVIVT.push(x - 2 + Math.log(x));
+        }
+        chartInstances['cIVT'] = new Chart(ctxIVT.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: xVIVT,
+                datasets: [
+                    { label: 'المنحني البياني f(x) = x - 2 + ln x', data: yVIVT, borderColor: '#00e676', borderWidth: 3.5, fill: false, pointRadius: 0 },
+                    { label: 'محور الفواصل y = 0', data: Array(xVIVT.length).fill(0), borderColor: '#ffd700', borderWidth: 1.5, borderDash: [4, 4], fill: false, pointRadius: 0 }
+                ]
+            },
+            options: studentChartOptions('محور الفواصل x', 'محور التراتيب y', -2.0, 3.0)
+        });
+    }
+
+    const ctx3 = document.getElementById('chartVar3');
+    if (ctx3) {
+        const xV3 = [], yV3 = [];
+        for (let x = 0.2; x <= 2.5; x += 0.08) {
+            xV3.push(x.toFixed(2));
+            yV3.push(1 / (x * (1 - Math.log(x))));
+        }
+        chartInstances['c3'] = new Chart(ctx3.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: xV3,
+                datasets: [
+                    { label: 'الفرع على المجال ]0, e[', data: yV3, borderColor: '#ffd700', borderWidth: 3.5, fill: false, pointRadius: 0 },
+                    { label: 'المقارب الأفقي y = 0', data: Array(xV3.length).fill(0), borderColor: '#ff3344', borderWidth: 2.2, borderDash: [6, 4], fill: false, pointRadius: 0 }
+                ]
+            },
+            options: studentChartOptions('محور الفواصل x', 'محور التراتيب y', 0, 5.0)
+        });
+    }
+
+    const ctx4 = document.getElementById('chartVar4');
+    if (ctx4) {
+        const xV4 = [], yV4 = [];
+        for (let x = 2.15; x <= 6.0; x += 0.1) {
+            xV4.push(x.toFixed(2));
+            yV4.push(Math.log(x / (x - 2)));
+        }
+        chartInstances['c4'] = new Chart(ctx4.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: xV4,
+                datasets: [
+                    { label: 'الفرع على المجال ]2, +inf[', data: yV4, borderColor: '#ffd700', borderWidth: 3.5, fill: false, pointRadius: 0 },
+                    { label: 'المقارب الأفقي y = 0', data: Array(xV4.length).fill(0), borderColor: '#ff3344', borderWidth: 2.2, borderDash: [6, 4], fill: false, pointRadius: 0 }
+                ]
+            },
+            options: studentChartOptions('محور الفواصل x', 'محور التراتيب y', 0, 4.0)
+        });
+    }
+
+    const ctxNew = document.getElementById('chartVarNew');
+    if (ctxNew) {
+        const xVNew = [], yVNew = [];
+        for (let x = 1.25; x <= 6.5; x += 0.15) {
+            xVNew.push(x.toFixed(2));
+            yVNew.push(Math.log((x + 1) / Math.log(x)));
+        }
+        chartInstances['cNew'] = new Chart(ctxNew.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: xVNew,
+                datasets: [{ label: 'المنحني البياني f(x)', data: yVNew, borderColor: '#ffd700', borderWidth: 3.5, fill: false, pointRadius: 0 }]
+            },
+            options: studentChartOptions('محور الفواصل x > 1', 'محور التراتيب y', 0, 3.5)
+        });
+    }
+
+    const ctx5 = document.getElementById('chartVar5');
+    if (ctx5) {
+        const xV5 = [], yV5 = [];
+        for (let x = 0.05; x <= 3.0; x += 0.05) {
+            xV5.push(x.toFixed(2));
+            yV5.push(x * Math.log(x));
+        }
+        chartInstances['c5'] = new Chart(ctx5.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: xV5,
+                datasets: [{ label: 'المنحني البياني f(x) = x ln x', data: yV5, borderColor: '#ffd700', borderWidth: 3.5, fill: false, pointRadius: 0 }]
+            },
+            options: studentChartOptions('محور الفواصل x', 'محور التراتيب y', -0.5, 3.0)
+        });
+    }
+
+    const ctx6 = document.getElementById('chartVar6');
+    if (ctx6) {
+        const xV6 = [], yV6 = [];
+        for (let x = 0.4; x <= 6.0; x += 0.1) {
+            xV6.push(x.toFixed(2));
+            yV6.push(Math.log(x) / (x * x));
+        }
+        chartInstances['c6'] = new Chart(ctx6.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: xV6,
+                datasets: [
+                    { label: 'المنحني البياني f(x)', data: yV6, borderColor: '#ffd700', borderWidth: 3.5, fill: false, pointRadius: 0 },
+                    { label: 'المقارب الأفقي y = 0', data: Array(xV6.length).fill(0), borderColor: '#ff3344', borderWidth: 2.2, borderDash: [6, 4], fill: false, pointRadius: 0 }
+                ]
+            },
+            options: studentChartOptions('محور الفواصل x', 'محور التراتيب y', -1.2, 0.6)
+        });
+    }
+
+    const ctx7 = document.getElementById('chartVar7');
+    if (ctx7) {
+        const xV7 = [], yV7 = [];
+        for (let x = 0.1; x <= 4.0; x += 0.1) {
+            xV7.push(x.toFixed(2));
+            yV7.push((x + 1) * Math.log(x));
+        }
+        chartInstances['c7'] = new Chart(ctx7.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: xV7,
+                datasets: [{ label: 'المنحني البياني f(x) = (x + 1) ln x', data: yV7, borderColor: '#ffd700', borderWidth: 3.5, fill: false, pointRadius: 0 }]
+            },
+            options: studentChartOptions('محور الفواصل x', 'محور التراتيب y', -2.0, 6.0)
+        });
+    }
+
+    const ctxC1 = document.getElementById('chartPtsCase1');
+    if (ctxC1) {
+        const xVals = [], yVals = [];
+        for (let x = 0.1; x <= 5.0; x += 0.2) {
+            xVals.push(x.toFixed(1));
+            yVals.push(x - 1);
+        }
+        chartInstances['pts1'] = new Chart(ctxC1.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['0.0', ...xVals],
+                datasets: [{
+                    label: 'نصف المستقيم y = x - 1 (x > 0)',
+                    data: [-1, ...yVals],
+                    borderColor: '#00e676',
+                    borderWidth: 3.5,
+                    fill: false,
+                    pointRadius: (ctx) => ctx.dataIndex === 0 ? 8 : 0,
+                    pointBackgroundColor: '#08090b',
+                    pointBorderColor: '#ff3344',
+                    pointBorderWidth: 3
+                }]
+            },
+            options: studentChartOptions('محور الفواصل x > 0', 'محور التراتيب y > -1', -1.5, 4.5)
+        });
+    }
+
+    const ctxC2 = document.getElementById('chartPtsCase2');
+    if (ctxC2) {
+        const xVals = [], yVals = [], yAsymPts = [];
+        for (let x = 0.2; x <= 5.0; x += 0.1) {
+            xVals.push(x.toFixed(1));
+            yVals.push(1 / x);
+            yAsymPts.push(0);
+        }
+        chartInstances['pts2'] = new Chart(ctxC2.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: xVals,
+                datasets: [
+                    { label: 'فرع القطع الزائد y = 1/x (x > 0)', data: yVals, borderColor: '#ffd700', borderWidth: 3.5, fill: false, pointRadius: 0 },
+                    { label: 'المقارب الأفقي y = 0', data: yAsymPts, borderColor: '#ff3344', borderWidth: 2.2, borderDash: [6, 4], fill: false, pointRadius: 0 }
+                ]
+            },
+            options: studentChartOptions('محور الفواصل x > 0', 'محور التراتيب y > 0', 0, 5.5)
+        });
+    }
+
+    const ctxC3 = document.getElementById('chartPtsCase3');
+    if (ctxC3) {
+        const curvePoints = [];
+        for (let x = -3.0; x <= -0.05; x += 0.05) {
+            curvePoints.push({ x: parseFloat(x.toFixed(2)), y: parseFloat((x * x).toFixed(2)) });
+        }
+
+        chartInstances['pts3'] = new Chart(ctxC3.getContext('2d'), {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'نصف القطع المكافئ y = x^2 (x < 0)',
+                        data: curvePoints,
+                        showLine: true,
+                        borderColor: '#00e676',
+                        borderWidth: 3.5,
+                        pointRadius: 0,
+                        fill: false
+                    },
+                    {
+                        label: 'النقطة المستثناة O(0, 0)',
+                        data: [{ x: 0, y: 0 }],
+                        pointRadius: 8,
+                        pointBackgroundColor: '#08090b',
+                        pointBorderColor: '#ff3344',
+                        pointBorderWidth: 3,
+                        showLine: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#ffffff', font: { family: 'Cairo', size: 13.5, weight: 'bold' } } }
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        title: { display: true, text: "محور الفواصل (x < 0) [دائرة مفرغة عند O]", color: '#ffd700', font: { family: 'Cairo', size: 14, weight: 'bold' } },
+                        ticks: { color: '#ffffff', font: { family: 'Cairo', size: 12, weight: '600' } },
+                        min: -3.5,
+                        max: 0.5,
+                        grid: { color: '#272c38', lineWidth: 1.2 }
+                    },
+                    y: {
+                        title: { display: true, text: 'محور التراتيب (y > 0)', color: '#ffd700', font: { family: 'Cairo', size: 14, weight: 'bold' } },
+                        ticks: { color: '#ffffff', font: { family: 'Cairo', size: 12, weight: '600' } },
+                        min: -0.5,
+                        max: 9.5,
+                        grid: { color: '#272c38', lineWidth: 1.2 }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>
