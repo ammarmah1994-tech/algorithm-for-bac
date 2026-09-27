@@ -1152,7 +1152,8 @@
             <div class="mcq-feedback" id="fb-9"></div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-9')" style="margin-top:10px;">التوضيح الرياضي</button>
             <div class="solution-drawer" id="sol-mcq-9">
-                شرط الوجود: $x > 1$. المعادلة: $(x-1)(x+2) = 4 \implies x^2 + x - 6 = 0 \implies (x-2)(x+3) = 0$. الحل $x = -3$ مرفوض لأنه لا يحقق الشرط، والحل الوحيد المقبول هو $x = 2$.
+                شرط الوجود: $x - 1 > 0 \implies x > 1$ و $x + 2 > 0 \implies x > -2$، بالتقاطع: $D = ]1, +\infty[$.<br>
+                المعادلة: $(x-1)(x+2) = 4 \implies x^2 + x - 6 = 0 \implies (x-2)(x+3) = 0$. الحل $x = -3 \notin D$ مرفوض، والحل الوحيد المقبول هو $x = 2 \in D$.
             </div>
         </div>
 
@@ -1220,19 +1221,20 @@
             </div>
         </div>
 
-        <!-- 14 -->
+        <!-- 14 (معدل: لوغاريتمي بحت دون تكامل أو أس) -->
         <div class="mcq-question" id="mcq-14">
-            <b>السؤال 14:</b> التابع الأصلي للتابع $f(x) = \frac{1}{x\ln x}$ على المجال $]1, +\infty[$ هو:
+            <b>السؤال 14:</b> مشتق التابع $f(x) = \ln(\ln x)$ على المجال $]1, +\infty[$ هو:
             <div class="mcq-options">
-                <div class="mcq-opt" onclick="checkMCQ('14', 0, false)">أ) $\ln x$</div>
-                <div class="mcq-opt" onclick="checkMCQ('14', 1, true)">ب) $\ln(\ln x)$</div>
-                <div class="mcq-opt" onclick="checkMCQ('14', 2, false)">ج) $\frac{1}{\ln x}$</div>
-                <div class="mcq-opt" onclick="checkMCQ('14', 3, false)">د) $\ln^2(x)$</div>
+                <div class="mcq-opt" onclick="checkMCQ('14', 0, false)">أ) $\frac{1}{\ln x}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('14', 1, true)">ب) $\frac{1}{x\ln x}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('14', 2, false)">ج) $\frac{1}{x}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('14', 3, false)">د) $\frac{\ln x}{x}$</div>
             </div>
             <div class="mcq-feedback" id="fb-14"></div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-14')" style="margin-top:10px;">التوضيح الرياضي</button>
             <div class="solution-drawer" id="sol-mcq-14">
-                الكسر من الشكل $\frac{u'(x)}{u(x)}$ حيث $u(x) = \ln x$ ومشتقتها $\frac{1}{x}$، وبالتالي التابع الأصلي هو $\ln|u(x)| = \ln(\ln x)$.
+                قاعدة مشتق مركب لوغاريتمي: $(\ln(u))' = \frac{u'}{u}$. هنا $u(x) = \ln x$ ومشتقتها $u'(x) = \frac{1}{x}$، فينتج:<br>
+                $$f'(x) = \frac{(\ln x)'}{\ln x} = \frac{\frac{1}{x}}{\ln x} = \frac{1}{x\ln x}$$
             </div>
         </div>
 
@@ -1252,19 +1254,21 @@
             </div>
         </div>
 
-        <!-- 16 -->
+        <!-- 16 (معدل: لوغاريتمي بحت دون أسس) -->
         <div class="mcq-question" id="mcq-16">
-            <b>السؤال 16:</b> قيمة المقدار $E = e^{3\ln 2} - \ln(\sqrt{e})$ تساوي:
+            <b>السؤال 16:</b> قيمة المقدار $E = \ln(72) - 3\ln(2) - 2\ln(3)$ تساوي:
             <div class="mcq-options">
-                <div class="mcq-opt" onclick="checkMCQ('16', 0, false)">أ) $6$</div>
-                <div class="mcq-opt" onclick="checkMCQ('16', 1, true)">ب) $7.5$ (أي $\frac{15}{2}$)</div>
-                <div class="mcq-opt" onclick="checkMCQ('16', 2, false)">ج) $8$</div>
-                <div class="mcq-opt" onclick="checkMCQ('16', 3, false)">د) $5.5$</div>
+                <div class="mcq-opt" onclick="checkMCQ('16', 0, true)">أ) $0$</div>
+                <div class="mcq-opt" onclick="checkMCQ('16', 1, false)">ب) $1$</div>
+                <div class="mcq-opt" onclick="checkMCQ('16', 2, false)">ج) $\ln 2$</div>
+                <div class="mcq-opt" onclick="checkMCQ('16', 3, false)">د) $\ln 3$</div>
             </div>
             <div class="mcq-feedback" id="fb-16"></div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-16')" style="margin-top:10px;">التوضيح الرياضي</button>
             <div class="solution-drawer" id="sol-mcq-16">
-                $e^{3\ln 2} = e^{\ln(2^3)} = 2^3 = 8$. و $\ln(\sqrt{e}) = \ln(e^{1/2}) = 1/2$. الناتج: $8 - 0.5 = 7.5 = 15/2$.
+                باستخدام خواص اللوغاريتم في تجميع الحدود الموجبة والسالبة:<br>
+                $3\ln 2 = \ln(2^3) = \ln 8$ و $2\ln 3 = \ln(3^2) = \ln 9$.<br>
+                $$E = \ln(72) - (\ln 8 + \ln 9) = \ln(72) - \ln(8 \times 9) = \ln(72) - \ln(72) = 0$$
             </div>
         </div>
 
@@ -1300,19 +1304,22 @@
             </div>
         </div>
 
-        <!-- 19 -->
+        <!-- 19 (معدل: لوغاريتمي بحت دون معادلة أسية) -->
         <div class="mcq-question" id="mcq-19">
-            <b>السؤال 19:</b> حل المعادلة $e^{2x} - 5e^x + 6 = 0$ هو:
+            <b>السؤال 19:</b> مجموعة حلول المعادلة $\ln(2x - 3) = \ln(x + 1)$ في $\mathbb{R}$ هي:
             <div class="mcq-options">
-                <div class="mcq-opt" onclick="checkMCQ('19', 0, true)">أ) $x = \ln 2$ و $x = \ln 3$</div>
-                <div class="mcq-opt" onclick="checkMCQ('19', 1, false)">ب) $x = 2$ و $x = 3$</div>
-                <div class="mcq-opt" onclick="checkMCQ('19', 2, false)">ج) $x = e^2$ و $x = e^3$</div>
-                <div class="mcq-opt" onclick="checkMCQ('19', 3, false)">د) $x = -\ln 2$ و $x = -\ln 3$</div>
+                <div class="mcq-opt" onclick="checkMCQ('19', 0, true)">أ) $\{4\}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('19', 1, false)">ب) $\{2\}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('19', 2, false)">ج) $\{4, -1\}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('19', 3, false)">د) $\emptyset$ (مستحيلة الحل)</div>
             </div>
             <div class="mcq-feedback" id="fb-19"></div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-19')" style="margin-top:10px;">التوضيح الرياضي</button>
             <div class="solution-drawer" id="sol-mcq-19">
-                بوضع $X = e^x$: $X^2 - 5X + 6 = 0 \implies (X-2)(X-3) = 0 \implies e^x = 2 \implies x = \ln 2$ أو $e^x = 3 \implies x = \ln 3$.
+                شرط وجود المعادلة: $2x - 3 > 0 \implies x > 3/2$ و $x + 1 > 0 \implies x > -1$، بتقاطع الشرطين نجد شرط الحل: $D = ]3/2, +\infty[$.<br>
+                بما أن التابع اللوغاريتمي متزايد تماماً، فإن $\ln(A) = \ln(B) \iff A = B$:<br>
+                $$2x - 3 = x + 1 \implies 2x - x = 1 + 3 \implies x = 4$$
+                بما أن $4 \in D = ]3/2, +\infty[$، فإن الحل مقبول ومجموعة الحلول هي $\{4\}$.
             </div>
         </div>
 
@@ -1350,10 +1357,16 @@
             </div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-img-ex1')">عرض الحل السلمي التفصيلي</button>
             <div class="solution-drawer" id="sol-img-ex1">
-                • $\frac{1}{2}(\ln a + \ln b) = \frac{1}{2}\ln(ab) = \ln\sqrt{ab}$.<br>
-                • بالمساواة: $\frac{a+b}{3} = \sqrt{ab} \implies a+b = 3\sqrt{ab} \implies (a+b)^2 = 9ab \implies a^2 - 7ab + b^2 = 0$.<br>
-                • بقسمة الطرفين على $b^2$ وبفرض $k = \frac{a}{b}$: $k^2 - 7k + 1 = 0 \implies \Delta = 45$.
+                <div class="condition-box">شرط الحل: العددان موجبان تماماً بالفرض: $a > 0$ و $b > 0$.</div>
+                • $\frac{1}{2}(\ln a + \ln b) = \frac{1}{2}\ln(ab) = \ln(ab)^{1/2} = \ln\sqrt{ab}$.<br>
+                • بالمساواة مع الطرف الأيسر: $\ln\left(\frac{a+b}{3}\right) = \ln\sqrt{ab} \implies \frac{a+b}{3} = \sqrt{ab} \implies a+b = 3\sqrt{ab}$.<br>
+                بتربيع الطرفين: $(a+b)^2 = (3\sqrt{ab})^2 \implies a^2 + 2ab + b^2 = 9ab \implies a^2 - 7ab + b^2 = 0$.<br>
+                • بقسمة طرفي المعادلة على $b^2 \ne 0$:
+                $$\left(\frac{a}{b}\right)^2 - 7\left(\frac{a}{b}\right) + 1 = 0$$
+                بفرض المتحول $k = \frac{a}{b} > 0$ نحصل على المعادلة التربيعية: $k^2 - 7k + 1 = 0$.<br>
+                المميز: $\Delta = (-7)^2 - 4(1)(1) = 49 - 4 = 45 = (3\sqrt{5})^2$.
                 <div class="ans-badge">$$k = \frac{a}{b} = \frac{7 \pm 3\sqrt{5}}{2}$$</div>
+                (وكلا الحلين موجب تماماً ومقبول).
             </div>
         </div>
 
@@ -1365,7 +1378,9 @@
             </div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-img-ex2')">عرض الحل والبرهان السلمي</button>
             <div class="solution-drawer" id="sol-img-ex2">
-                • تابع الفرق: $h(x) = \ln x - x + 1 \implies h'(x) = \frac{1-x}{x}$ ينعدم عند $1$.<br><br>
+                <div class="condition-box">شرط الحل والوجود: $x \in ]0, +\infty[$ أي $x > 0$.</div>
+                • تابع الفرق: $h(x) = \ln x - x + 1$ معرف واشتقاقي على $]0, +\infty[$.<br>
+                مشتقه: $h'(x) = \frac{1}{x} - 1 = \frac{1-x}{x}$. ينعدم المشتق عند $x = 1$.<br><br>
                 <b>جدول التغيرات أولاً:</b>
                 <div class="table-wrapper">
                     <table class="var-grid">
@@ -1375,10 +1390,29 @@
                     </table>
                 </div>
                 <div class="analysis-box">
-                    <div class="analysis-box-title">المناقشة وحصر العدد $e$:</div>
-                    القيمة الكبرى الشاملة لتابع الفرق هي $h(1) = 0 \implies \ln x \le x - 1$.<br>
-                    بالتعويض $x = e^{1/3}$ و $x = e^{-1/3}$ نجد حصر العدد $e$ بالكسور حصراً:
-                    <div class="ans-badge">$$\frac{64}{27} \le e \le \frac{27}{8}$$</div>
+                    <div class="analysis-box-title">المناقشة والتوضيح الرياضي الشامل لحصر العدد $e$ بالتفصيل:</div>
+                    من جدول التغيرات يبلغ التابع $h$ قيمة كبرى شاملة عند $x = 1$ هي $h(1) = 0$، ومنه أياً كان $x > 0$ فإن:
+                    $$h(x) \le 0 \implies \ln x - x + 1 \le 0 \implies \ln x \le x - 1$$
+                    <br>
+                    <b>توضيح خطوات حصر العدد $e$ بالتفصيل خطوة بخطوة:</b><br>
+                    <b>الخطوة 1 (الطرف الأيمن للحصر):</b> نعوض $x = e^{1/3}$ في المتراجحة $\ln x \le x - 1$:
+                    $$\ln\left(e^{1/3}\right) \le e^{1/3} - 1 \implies \frac{1}{3} \le e^{1/3} - 1$$
+                    نضيف 1 للطرفين:
+                    $$e^{1/3} \ge 1 + \frac{1}{3} = \frac{4}{3}$$
+                    بتكعيب الطرفين (ودالة التكعيب متزايدة تماماً تحافظ على جهة التراجح):
+                    $$\left(e^{1/3}\right)^3 \ge \left(\frac{4}{3}\right)^3 \implies e \ge \frac{64}{27}$$
+                    <br>
+                    <b>الخطوة 2 (الطرف الأيسر للحصر):</b> نعوض $x = e^{-1/3}$ في المتراجحة $\ln x \le x - 1$:
+                    $$\ln\left(e^{-1/3}\right) \le e^{-1/3} - 1 \implies -\frac{1}{3} \le \frac{1}{e^{1/3}} - 1$$
+                    نضيف 1 للطرفين:
+                    $$\frac{1}{e^{1/3}} \ge 1 - \frac{1}{3} = \frac{2}{3}$$
+                    نأخذ مقلوب الطرفين الموجبين تماماً (فتنعكس جهة التراجح):
+                    $$e^{1/3} \le \frac{3}{2}$$
+                    بتكعيب الطرفين:
+                    $$\left(e^{1/3}\right)^3 \le \left(\frac{3}{2}\right)^3 \implies e \le \frac{27}{8}$$
+                    <br>
+                    <b>الخطوة 3 (النتيجة النهائية لحصر العدد $e$):</b> بدمج المتراجحتين:
+                    <div class="ans-badge">$$\frac{64}{27} \le e \le \frac{27}{8} \quad \left( \approx 2.37 \le e \le 3.375 \right)$$</div>
                 </div>
             </div>
         </div>
@@ -1386,23 +1420,28 @@
         <div class="exam-block">
             <div class="exam-question-title">التمرين 3</div>
             <div class="exam-paper-text">
-                أثبت أنه أياً كان $x > 0$ فإن: $\ln(x+1) < x$ بالاعتماد على دراسة اطراد تابع مساعد مناسب.
+                أثبت أنه أياً كان $x > 0$ فإن: $\ln(x+1) < x$ بالاعتماد على دراسة اطراد تابع مساعد مناسب دون اللجوء لجدول تغيرات.
             </div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-ineq-mono')">عرض الحل والبرهان السلمي</button>
             <div class="solution-drawer" id="sol-ineq-mono">
-                نعرف $h(x) = x - \ln(x+1)$ على $[0, +\infty[$. مشتقّه $h'(x) = \frac{x}{x+1} > 0$ لـ $x > 0$.<br><br>
-                <b>جدول الاطراد أولاً:</b>
-                <div class="table-wrapper">
-                    <table class="var-grid">
-                        <tr><th>$x$</th><td>0</td><td></td><td>$+\infty$</td></tr>
-                        <tr><th>$h'(x)$</th><td>0</td><td>+</td><td></td></tr>
-                        <tr><th>$h(x)$</th><td>0</td><td>$\nearrow$</td><td>$+\infty$</td></tr>
-                    </table>
-                </div>
-                <div class="analysis-box">
-                    <div class="analysis-box-title">المناقشة والاستنتاج:</div>
-                    بما أن $h(0) = 0$ والتابع $h$ متزايد تماماً، فإنه أياً كان $x > 0$ يكون $h(x) > h(0) \implies x - \ln(x+1) > 0 \implies \ln(x+1) < x$.
-                </div>
+                <div class="condition-box">شرط الحل والوجود: $x+1 > 0 \implies x > -1$، والمطلوب إثبات المتراجحة على المجال $]0, +\infty[$.</div>
+                <div class="step-title">إثبات صحة المتراجحة بالاطراد فقط (دون جدول تغيرات):</div>
+                نعرف التابع المساعد $h$ على المجال الشبه مغلق $[0, +\infty[$ وفق:
+                $$h(x) = x - \ln(x+1)$$
+                1) التابع $h$ مستمر واشتقاقي على المجال $[0, +\infty[$ كفرق تابعين اشتقاقيين.<br>
+                2) مشتق التابع:
+                $$h'(x) = 1 - \frac{1}{x+1} = \frac{(x+1) - 1}{x+1} = \frac{x}{x+1}$$
+                3) <b>دراسة الاطراد:</b><br>
+                أياً كان $x \in ]0, +\infty[$ فإن البسط $x > 0$ والمقام $x+1 > 0$، ومنه يكون:
+                $$h'(x) > 0 \quad \forall x > 0$$
+                وبالتالي فإن التابع $h$ <b>متزايد تماماً</b> على المجال $[0, +\infty[$.<br>
+                4) نحسب قيمة التابع عند المبدأ:
+                $$h(0) = 0 - \ln(0+1) = -\ln(1) = 0$$
+                5) بما أن $h$ متزايد تماماً على $[0, +\infty[$، فإنه أياً كان $x > 0$:
+                $$x > 0 \implies h(x) > h(0)$$
+                وبالتعويض المباشر:
+                $$x - \ln(x+1) > 0 \implies \ln(x+1) < x$$
+                وهو المطلوب إثباته بالاعتماد الحصري على جهة اطراد التابع دون تنظيم جدول تغيرات.
             </div>
         </div>
 
@@ -1412,11 +1451,32 @@
                 <b>المطلوب 1:</b> حل في $\mathbb{R}$ المعادلة: $\ln^2(x) - 3\ln(x) + 2 = 0$.<br>
                 <b>المطلوب 2:</b> حل في $\mathbb{R}$ المتراجحة: $\ln^2(x) - 3\ln(x) + 2 \le 0$.
             </div>
-            <button class="toggle-solution-btn" onclick="toggleSol('sol-eq-deg2')">عرض الحل النموذجي المفصل</button>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-eq-deg2')">عرض الحل النموذجي المفصل مع التوضيح الكامل</button>
             <div class="solution-drawer" id="sol-eq-deg2">
-                بوضع $t = \ln x$: $t^2 - 3t + 2 = 0 \implies (t-1)(t-2) = 0$.<br>
-                • حلول المعادلة: $S = \{e, \, e^2\}$.<br><br>
-                • <b>حل المتراجحة: جدول الإشارة أولاً:</b>
+                <div class="condition-box">
+                    <b>شرط الحل المشترك للمعادلة والمتراجحة:</b><br>
+                    يشترط لوجود المقدار $\ln(x)$ أن يكون ما بداخل اللوغاريتم موجباً تماماً، أي:
+                    $$D = ]0, \, +\infty[$$
+                </div>
+
+                <div class="step-title">المطلوب 1: حل المعادلة $\ln^2(x) - 3\ln(x) + 2 = 0$ مع توضيح الحل:</div>
+                <b>توضيح فكرة الحل:</b> نلاحظ أن المعادلة من الدرجة الثانية بالنسبة للمقدار $\ln x$. نستخدم طريقة تغيير المتحول بتحويلها إلى معادلة تربيعية بسيطة:<br>
+                نضع المتحول المساعد: $t = \ln x$ (حيث $t \in \mathbb{R}$).<br>
+                تصبح المعادلة:
+                $$t^2 - 3t + 2 = 0$$
+                نحلل المقدار ثلاثي الحدود إلى جداء عوامل بالبحث عن عددين مجموعهما $-3$ وجداؤهما $+2$ وهما $-1$ و $-2$:
+                $$(t - 1)(t - 2) = 0$$
+                ينتج احتمالان لقيمة $t$:
+                1. $t - 1 = 0 \implies t = 1 \implies \ln x = 1 \implies x = e^1 = e$.<br>
+                2. $t - 2 = 0 \implies t = 2 \implies \ln x = 2 \implies x = e^2$.<br>
+                التحقق من شرط الحل: كلاهما ينتمي إلى المجال $D = ]0, +\infty[$ ($e \in D$ و $e^2 \in D$).<br>
+                <div class="ans-badge">مجموعة حلول المعادلة: $S = \{e, \, e^2\}$</div>
+
+                <div class="step-title" style="margin-top:18px;">المطلوب 2: حل المتراجحة $\ln^2(x) - 3\ln(x) + 2 \le 0$ وتوضيح الحل:</div>
+                <b>توضيح الحل:</b> بنفس تغيير المتحول $t = \ln x$، تصبح المتراجحة:
+                $$t^2 - 3t + 2 \le 0$$
+                جذرا المعادلة المرافقة هما $t_1 = 1$ و $t_2 = 2$.<br><br>
+                <b>جدول إشارة ثلاثي الحدود $t^2 - 3t + 2$ أولاً:</b>
                 <div class="table-wrapper">
                     <table class="var-grid">
                         <tr><th>$t$</th><td>$-\infty$</td><td></td><td>1</td><td></td><td>2</td><td></td><td>$+\infty$</td></tr>
@@ -1424,8 +1484,14 @@
                     </table>
                 </div>
                 <div class="analysis-box">
-                    <div class="analysis-box-title">المناقشة واستنتاج حل المتراجحة:</div>
-                    $1 \le t \le 2 \iff 1 \le \ln x \le 2 \iff e \le x \le e^2$.
+                    <div class="analysis-box-title">المناقشة واستنتاج حل المتراجحة الأصلي بالنسبة لـ $x$:</div>
+                    المقدار سالب أو معدوم (أي $\le 0$) بين الجذرين $1$ و $2$:
+                    $$1 \le t \le 2$$
+                    نعيد تعويض $t = \ln x$:
+                    $$1 \le \ln x \le 2$$
+                    بما أن التابع اللوغاريتمي متزايد تماماً فإننا نأخذ الأساس النيبري $e$ للأطراف مع المحافظة على جهة التراجح:
+                    $$e^1 \le x \le e^2 \iff e \le x \le e^2$$
+                    التقاطع مع شرط الحل $D = ]0, +\infty[$: المجال $[e, e^2]$ محتوى تماماً في $D$.
                     <div class="ans-badge">مجموعة حلول المتراجحة: $S = [e, \, e^2]$</div>
                 </div>
             </div>
@@ -1438,10 +1504,25 @@
             </div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-eq-sqrt')">عرض الحل النموذجي المفصل</button>
             <div class="solution-drawer" id="sol-eq-sqrt">
-                شرط الوجود: $D = ]3/2, 6[$.<br>
-                نضرب بـ 2: $\ln(2x-3) + \ln x = 2\ln(6-x) \iff x(2x-3) = (6-x)^2 \implies x^2 + 9x - 36 = 0$.<br>
-                $(x+12)(x-3) = 0 \implies x = 3 \in ]3/2, 6[$ (مقبول) و $x = -12$ (مرفوض).
-                <div class="ans-badge">$S = \{3\}$</div>
+                <div class="condition-box">
+                    <b>شرط الحل والوجود $D$:</b><br>
+                    • $2x - 3 > 0 \implies x > 3/2$<br>
+                    • $6 - x > 0 \implies x < 6$<br>
+                    • $x > 0$<br>
+                    بتقاطع الشروط الثلاثة: $D = ]3/2, \, 6[$.
+                </div>
+                نعلم أن $\ln\sqrt{2x-3} = \frac{1}{2}\ln(2x-3)$. تصبح المعادلة:
+                $$\frac{1}{2}\ln(2x-3) = \ln(6-x) - \frac{1}{2}\ln x$$
+                نضرب كامل المعادلة بـ 2 للتخلص من الكسور:
+                $$\ln(2x-3) = 2\ln(6-x) - \ln x$$
+                ننقل $-\ln x$ للطرف الأيسر:
+                $$\ln(2x-3) + \ln x = 2\ln(6-x) \implies \ln[x(2x-3)] = \ln[(6-x)^2]$$
+                بمطابقة ما بداخل اللوغاريتم:
+                $$x(2x-3) = (6-x)^2 \implies 2x^2 - 3x = 36 - 12x + x^2$$
+                $$x^2 + 9x - 36 = 0 \implies (x+12)(x-3) = 0$$
+                • $x = -12 \notin D$ (مرفوض لأنه خارج مجال شرط الحل).<br>
+                • $x = 3 \in D = ]3/2, 6[$ (مقبول لأنه يحقق شرط الحل).
+                <div class="ans-badge">مجموعة الحلول: $S = \{3\}$</div>
             </div>
         </div>
 
@@ -1454,9 +1535,39 @@
             </div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-eq-abs-all')">عرض الحلول المفصلة خطوة بخطوة</button>
             <div class="solution-drawer" id="sol-eq-abs-all">
-                <b>1) المعادلة الأولى:</b> $|2x^2+x-3| = x^2 \implies S_1 = \left\{ \frac{-1 \pm \sqrt{13}}{2}, \, \frac{-1 \pm \sqrt{37}}{6} \right\}$.<br><br>
-                <b>2) المعادلة الثانية:</b> $|x-2|(x+4) = 64$ بشرط $x > -4$ و $x \ne 2 \implies S_2 = \{8\}$.<br><br>
-                <b>3) المعادلة الثالثة:</b> $|x^2-9| = 8x$ بشرط $x > 0$ و $x \ne 3 \implies S_3 = \{1, \, 9\}$.
+                <b>1) المعادلة الأولى: $\ln|2x+3| + \ln|x-1| = 2\ln|x|$</b><br>
+                <div class="condition-box">
+                    شرط الحل: عدم انعدام ما داخل القيمة المطلقة: $2x+3 \ne 0 \implies x \ne -3/2$ و $x-1 \ne 0 \implies x \ne 1$ و $x \ne 0$.<br>
+                    $D_1 = \mathbb{R} \setminus \{-3/2, 0, 1\}$.
+                </div>
+                تجميع اللوغاريتم: $\ln|(2x+3)(x-1)| = \ln(x^2) \implies |2x^2 + x - 3| = x^2$.<br>
+                ينتج حالتان جبريتان:<br>
+                • الحالة الأولى: $2x^2 + x - 3 = x^2 \implies x^2 + x - 3 = 0 \implies x = \frac{-1 \pm \sqrt{13}}{2}$ (كلاهما ينتمي إلى $D_1$).<br>
+                • الحالة الثانية: $2x^2 + x - 3 = -x^2 \implies 3x^2 + x - 3 = 0 \implies x = \frac{-1 \pm \sqrt{37}}{6}$ (كلاهما ينتمي إلى $D_1$).
+                <div class="ans-badge">$$S_1 = \left\{ \frac{-1 - \sqrt{13}}{2}, \, \frac{-1 + \sqrt{13}}{2}, \, \frac{-1 - \sqrt{37}}{6}, \, \frac{-1 + \sqrt{37}}{6} \right\}$$</div>
+                <br>
+
+                <b>2) المعادلة الثانية: $\ln|x-2| + \ln(x+4) = 3\ln(4)$</b><br>
+                <div class="condition-box">
+                    شرط الحل: $|x-2| \ne 0 \implies x \ne 2$، وما داخل اللوغاريتم العادي موجب تماماً: $x + 4 > 0 \implies x > -4$.<br>
+                    $D_2 = ]-4, +\infty[ \setminus \{2\} = ]-4, 2[ \cup ]2, +\infty[$.
+                </div>
+                تصبح المعادلة: $\ln(|x-2|(x+4)) = \ln(4^3) = \ln(64) \implies |x-2|(x+4) = 64$.<br>
+                • إذا كان $x \in ]2, +\infty[$: $(x-2)(x+4) = 64 \implies x^2 + 2x - 8 = 64 \implies x^2 + 2x - 72 = 0$.<br>
+                $\Delta' = 1 - (-72) = 73 \implies x = -1 + \sqrt{73} \approx 7.54 \in ]2, +\infty[$ (مقبول)، و $x = -1 - \sqrt{73} \approx -9.54 \notin D_2$ (مرفوض).<br>
+                • إذا كان $x \in ]-4, 2[$: $-(x-2)(x+4) = 64 \implies -x^2 - 2x + 8 = 64 \implies x^2 + 2x + 56 = 0$، ومميزها $\Delta' = 1 - 56 = -55 < 0$ مستحيلة الحل في $\mathbb{R}$.
+                <div class="ans-badge">$$S_2 = \{-1 + \sqrt{73}\}$$</div>
+                <br>
+
+                <b>3) المعادلة الثالثة: $\ln|x-3| + \ln|x+3| = \ln(8x)$</b><br>
+                <div class="condition-box">
+                    شرط الحل: $8x > 0 \implies x > 0$، و $x - 3 \ne 0 \implies x \ne 3$، و $x + 3 \ne 0 \implies x \ne -3$.<br>
+                    $D_3 = ]0, +\infty[ \setminus \{3\} = ]0, 3[ \cup ]3, +\infty[$.
+                </div>
+                تصبح المعادلة: $\ln(|(x-3)(x+3)|) = \ln(8x) \implies |x^2 - 9| = 8x$.<br>
+                • إذا كان $x > 3$: $x^2 - 9 = 8x \implies x^2 - 8x - 9 = 0 \implies (x-9)(x+1) = 0 \implies x = 9 \in ]3, +\infty[$ (مقبول)، بينما $x = -1 \notin D_3$ (مرفوض).<br>
+                • إذا كان $x \in ]0, 3[$: $-(x^2 - 9) = 8x \implies 9 - x^2 = 8x \implies x^2 + 8x - 9 = 0 \implies (x-1)(x+9) = 0 \implies x = 1 \in ]0, 3[$ (مقبول)، بينما $x = -9 \notin D_3$ (مرفوض).
+                <div class="ans-badge">$$S_3 = \{1, \, 9\}$$</div>
             </div>
         </div>
 
@@ -1468,7 +1579,14 @@
             </div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-ineq-frac-n')">عرض الحل النموذجي المفصل</button>
             <div class="solution-drawer" id="sol-ineq-frac-n">
-                • <b>المتراجحة الكسرية: جدول الإشارة أولاً:</b>
+                <b>1) المتراجحة الكسرية:</b><br>
+                <div class="condition-box">
+                    شرط الحل والوجود: $2x > 0 \implies x > 0$ و $x > 0$ وعدم انعدام المقام: $\ln x \ne 0 \implies x \ne 1$.<br>
+                    إذن شرط الحل: $D = ]0, 1[ \cup ]1, +\infty[$.
+                </div>
+                • ينعدم البسط: $\ln(2x) - 1 = 0 \iff \ln(2x) = 1 \iff 2x = e \iff x = \frac{e}{2} \approx 1.359$.<br>
+                • ينعدم المقام: $\ln x = 0 \iff x = 1$.<br><br>
+                <b>جدول إشارة الكسر أولاً:</b>
                 <div class="table-wrapper">
                     <table class="var-grid">
                         <tr><th>$x$</th><td>0</td><td></td><td>1</td><td></td><td>e/2</td><td></td><td>$+\infty$</td></tr>
@@ -1478,13 +1596,23 @@
                     </table>
                 </div>
                 <div class="analysis-box">
-                    <div class="analysis-box-title">مجموعة الحلول:</div>
-                    <div class="ans-badge">$S = ]0, 1[ \cup \left[\frac{e}{2}, +\infty\right[$</div>
+                    <div class="analysis-box-title">استنتاج الحل ومقاطعته مع شرط الحل:</div>
+                    المتراجحة تطلب المقدار موجباً أو معدوماً ($\ge 0$). من الجدول نأخذ المجالات الموجبة:
+                    <div class="ans-badge">$$S = ]0, 1[ \, \cup \, \left[\frac{e}{2}, \, +\infty\right[$$</div>
                 </div>
                 <br>
-                • <b>متراجحات الأس الطبيعي $n$:</b><br>
-                - $2^n \le 100 \implies n \le \frac{\ln 100}{\ln 2} \approx 6.64 \implies n \in \{0, 1, 2, 3, 4, 5, 6\}$.<br>
-                - $\left(\frac{2}{3}\right)^n > 10^{-3} \implies n < \frac{3\ln 10}{\ln 3 - \ln 2} \approx 17.03 \implies n \in \{0, 1, \dots, 17\}$.
+                <b>2) متراجحات الأس الطبيعي $n \in \mathbb{N}$:</b><br>
+                • $2^n \le 100$: بأخذ اللوغاريتم الطبيعي للطرفين (بما أن التابع متزايد تماماً):
+                $$n \ln 2 \le \ln 100 \implies n \le \frac{\ln 100}{\ln 2} \approx \frac{4.605}{0.693} \approx 6.64$$
+                بما أن $n$ عدد طبيعي ($n \in \mathbb{N}$):
+                <div class="ans-badge">$$n \in \{0, 1, 2, 3, 4, 5, 6\}$$</div>
+                <br>
+                • $\left(\frac{2}{3}\right)^n > 10^{-3}$: بأخذ اللوغاريتم للطرفين:
+                $$n \ln\left(\frac{2}{3}\right) > \ln(10^{-3}) \implies n (\ln 2 - \ln 3) > -3\ln 10$$
+                بما أن $\ln 2 - \ln 3 < 0$، فعند القسمة عليه تنعكس جهة التراجح:
+                $$n < \frac{-3\ln 10}{\ln 2 - \ln 3} = \frac{3\ln 10}{\ln 3 - \ln 2} \approx \frac{3(2.3026)}{1.0986 - 0.6931} = \frac{6.9078}{0.4055} \approx 17.03$$
+                بما أن $n \in \mathbb{N}$:
+                <div class="ans-badge">$$n \in \{0, 1, 2, \dots, 17\}$$</div>
             </div>
         </div>
 
@@ -1496,8 +1624,41 @@
             </div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-systems')">عرض الحل النموذجي المفصل</button>
             <div class="solution-drawer" id="sol-systems">
-                • <b>الجملة الأولى:</b> $xy = 225$ و $x+y=30 \implies t^2 - 30t + 225 = 0 \implies t = 15 \implies (x, y) = (15, 15)$.<br><br>
-                • <b>الجملة الثانية:</b> بوضع $X = \ln x$ و $Y = \ln y$: ينتج $X = 2$ و $Y = 1 \implies (x, y) = (e^2, e)$.
+                <div class="step-title">حل الجملة الأولى بالتفصيل:</div>
+                <div class="condition-box">
+                    <b>شرط حل الجملة الأولى:</b> يشترط لوجود $\ln x$ و $\ln y$ أن يكون المجهولان موجبين تماماً: $x > 0$ و $y > 0$.
+                </div>
+                نبسط المعادلة الثانية من الجملة:
+                $$\ln(x) + \ln(y) = \ln(xy)$$
+                $$2\ln 3 + \ln 25 = \ln(3^2) + \ln 25 = \ln(9 \times 25) = \ln(225)$$
+                بمطابقة الطرفين: $xy = 225$.<br>
+                أصبح لدينا جملة مجموع وجداء:
+                $$\begin{cases} x + y = 30 \\ xy = 225 \end{cases}$$
+                العددان $x$ و $y$ هما حلا المعادلة التربيعية من الشكل $t^2 - S t + P = 0$:
+                $$t^2 - 30t + 225 = 0 \implies (t - 15)^2 = 0 \implies t = 15$$
+                بما أن الجذر مضاعف، فإن $x = 15$ و $y = 15$.<br>
+                التحقق: $15 > 0$ و $15 > 0$ يحققان شرط الحل.
+                <div class="ans-badge">حل الجملة الأولى هو الثنائية الوحيدة: $(x, y) = (15, 15)$</div>
+
+                <div class="step-title" style="margin-top:20px;">حل الجملة الثانية بالتفصيل:</div>
+                <div class="condition-box">
+                    <b>شرط حل الجملة الثانية:</b> يشترط لوجود $\ln x$ و $\ln y$ أن يكون: $x > 0$ و $y > 0$.
+                </div>
+                نستخدم طريقة تغيير المتحول الخطي بفرض:
+                $$X = \ln x, \quad Y = \ln y$$
+                تتحول الجملة إلى جملة خطية بمجهولين:
+                $$\begin{cases} 3X + 2Y = 8 \quad \text{--- (1)} \\ 2X - 3Y = 1 \quad \text{--- (2)} \end{cases}$$
+                نضرب المعادلة (1) بالعدد 3 والمعادلة (2) بالعدد 2 للتخلص من $Y$:
+                $$\begin{cases} 9X + 6Y = 24 \\ 4X - 6Y = 2 \end{cases}$$
+                بجمع المعادلتين طرفاً لطرف:
+                $$13X = 26 \implies X = 2$$
+                نعوض قيمة $X = 2$ في المعادلة (1):
+                $$3(2) + 2Y = 8 \implies 6 + 2Y = 8 \implies 2Y = 2 \implies Y = 1$$
+                الآن نعيد التعويض بالنسبة للمتحولين الأصليين $x$ و $y$:
+                $$\ln x = X = 2 \implies x = e^2$$
+                $$\ln y = Y = 1 \implies y = e^1 = e$$
+                التحقق من شرط الحل: $e^2 > 0$ و $e > 0$، فالحل مقبول تماماً.
+                <div class="ans-badge">حل الجملة الثانية هو الثنائية: $(x, y) = (e^2, e)$</div>
             </div>
         </div>
 
@@ -1511,8 +1672,8 @@
             </div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-poly-ineq')">عرض خطوات الحل والقسمة الإقليدية بالتفصيل</button>
             <div class="solution-drawer" id="sol-poly-ineq">
-                • التحقق: $P(-1) = 2(-1) + 5(1) - 1 - 2 = 0$.<br>
-                • إجراء القسمة الإقليدية:
+                • التحقق: $P(-1) = 2(-1)^3 + 5(-1)^2 + (-1) - 2 = -2 + 5 - 1 - 2 = 0$. إذن $(-1)$ جذر لكثير الحدود $P(x)$.<br>
+                • إجراء القسمة الإقليدية لـ $P(x)$ على $(x + 1)$:
                 <div class="division-box">
   (2x^3 + 5x^2 + x - 2) ÷ (x + 1) = 2x^2 + 3x - 2<br>
 - (2x^3 + 2x^2)<br>
@@ -1525,7 +1686,8 @@
               ------------<br>
                          0
                 </div>
-                التحليل الكامل: $P(x) = (x+1)(2x-1)(x+2)$.<br><br>
+                نحلل الناتج التربيعي: $2x^2 + 3x - 2 = (2x - 1)(x + 2)$.<br>
+                التحليل الكامل لكثير الحدود: $P(x) = (x+1)(2x-1)(x+2)$.<br><br>
                 • <b>جدول دراسة إشارة $P(x)$ أولاً:</b>
                 <div class="table-wrapper">
                     <table class="var-grid">
@@ -1538,9 +1700,21 @@
                 </div>
                 <div class="analysis-box">
                     <div class="analysis-box-title">المناقشة واستنتاج حل المتراجحة اللوغاريتمية:</div>
-                    - حل المتراجحة الجبرية: $S_1 = [-2, -1] \cup [1/2, +\infty[$.<br>
-                    - شرط المتراجحة اللوغاريتمية: $D = ]0, 2[$. بمقاطعة الحلين نجد:
-                    <div class="ans-badge">$S = [1/2, \, 2[$</div>
+                    - حل المتراجحة الجبرية $P(x) \ge 0$ هو: $S_{\text{poly}} = [-2, -1] \cup [1/2, +\infty[$.<br><br>
+                    <div class="condition-box">
+                        <b>شرط حل المتراجحة اللوغاريتمية $D$:</b><br>
+                        • $x > 0$<br>
+                        • $2x + 5 > 0 \implies x > -5/2$<br>
+                        • $2 - x > 0 \implies x < 2$<br>
+                        بتقاطع الشروط الثلاثة: $D = ]0, \, 2[$.
+                    </div>
+                    بتجميع حدود المتراجحة اللوغاريتمية:
+                    $$\ln(x^2) + \ln(2x+5) \ge \ln(2-x) \implies \ln[x^2(2x+5)] \ge \ln(2-x)$$
+                    بما أن التابع اللوغاريتمي متزايد تماماً:
+                    $$x^2(2x+5) \ge 2 - x \implies 2x^3 + 5x^2 + x - 2 \ge 0 \iff P(x) \ge 0$$
+                    نقاطع حل المتراجحة الجبرية $S_{\text{poly}}$ مع شرط الحل $D = ]0, 2[$:
+                    $$S = \Big([-2, -1] \cup [1/2, +\infty[\Big) \cap ]0, 2[ = [1/2, \, 2[$$
+                    <div class="ans-badge">مجموعة حلول المتراجحة اللوغاريتمية: $S = [1/2, \, 2[$</div>
                 </div>
             </div>
         </div>
