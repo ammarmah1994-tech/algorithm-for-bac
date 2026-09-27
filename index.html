@@ -543,7 +543,7 @@
         <button class="nav-tab-btn active" onclick="showTab(event, 'tab-variations')">مسائل الـ 100 علامة الكبرى ودراسة التغيرات</button>
         <button class="nav-tab-btn" onclick="showTab(event, 'tab-mcq')">قسم الأتمتة والأسئلة الموضوعية (20 سؤالاً)</button>
         <button class="nav-tab-btn" onclick="showTab(event, 'tab-unified-eq')">المعادلات والمتراجحات وجمل المعادلات (قسم موحد)</button>
-        <button class="nav-tab-btn" onclick="showTab(event, 'tab-rel-pos-tables')">الأوضاع النسبية والمقاربات (جداول الفرق $h$ والمناقشة)</button>
+        <button class="nav-tab-btn" onclick="showTab(event, 'tab-rel-pos-tables')">الأوضاع النسبية والمقاربات والمماسات</button>
         <button class="nav-tab-btn" onclick="showTab(event, 'tab-limits-indet')">إزالة عدم التعيين وحساب النهايات</button>
         <button class="nav-tab-btn" onclick="showTab(event, 'tab-deriv-cont-app')">الاستمرار وقابلية الاشتقاق والتقريب التآلفي</button>
         <button class="nav-tab-btn" onclick="showTab(event, 'tab-points-geom')">مجموعات نقاط المستوي والتبسيط وإثبات التدريج</button>
@@ -884,7 +884,7 @@
             </div>
         </div>
 
-        <!-- المسألة 6 (محدثة: جدول اطراد التابع المساعد g) -->
+        <!-- المسألة 6 -->
         <div class="exam-block">
             <div class="exam-question-title">المسألة 6</div>
             <div class="exam-paper-text">
@@ -1113,10 +1113,12 @@
         <!-- 5 -->
         <div class="mcq-question" id="mcq-5">
             <b>السؤال 5:</b> مجموعة تعريف التابع $f(x) = \ln(x^2 + 3)$ هي:
-            <div class="mcq-opt" onclick="checkMCQ('5', 0, true)">أ) $\mathbb{R}$ كاملاً</div>
-            <div class="mcq-opt" onclick="checkMCQ('5', 1, false)">ب) $]0, +\infty[$</div>
-            <div class="mcq-opt" onclick="checkMCQ('5', 2, false)">ج) $\mathbb{R} \setminus \{-\sqrt{3}, \sqrt{3}\}$</div>
-            <div class="mcq-opt" onclick="checkMCQ('5', 3, false)">د) $]\sqrt{3}, +\infty[$</div>
+            <div class="mcq-options">
+                <div class="mcq-opt" onclick="checkMCQ('5', 0, true)">أ) $\mathbb{R}$ كاملاً</div>
+                <div class="mcq-opt" onclick="checkMCQ('5', 1, false)">ب) $]0, +\infty[$</div>
+                <div class="mcq-opt" onclick="checkMCQ('5', 2, false)">ج) $\mathbb{R} \setminus \{-\sqrt{3}, \sqrt{3}\}$</div>
+                <div class="mcq-opt" onclick="checkMCQ('5', 3, false)">د) $]\sqrt{3}, +\infty[$</div>
+            </div>
             <div class="mcq-feedback" id="fb-5"></div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-mcq-5')" style="margin-top:10px;">التوضيح الرياضي</button>
             <div class="solution-drawer" id="sol-mcq-5">
@@ -1449,31 +1451,38 @@
             </div>
         </div>
 
+        <!-- التمرين 3 (محدث: جدول الاطراد أولاً ثم المناقشة) -->
         <div class="exam-block">
             <div class="exam-question-title">التمرين 3</div>
             <div class="exam-paper-text">
-                أثبت أنه أياً كان $x > 0$ فإن: $\ln(x+1) < x$ بالاعتماد على دراسة اطراد تابع مساعد مناسب دون اللجوء لجدول تغيرات.
+                أثبت أنه أياً كان $x > 0$ فإن: $\ln(x+1) < x$ بالاعتماد على دراسة اطراد تابع مساعد مناسب.
             </div>
-            <button class="toggle-solution-btn" onclick="toggleSol('sol-ineq-mono')">عرض الحل والبرهان السلمي</button>
+            <button class="toggle-solution-btn" onclick="toggleSol('sol-ineq-mono')">عرض الحل والبرهان السلمي وجدول الاطراد</button>
             <div class="solution-drawer" id="sol-ineq-mono">
                 <div class="condition-box">شرط الحل والوجود: $x+1 > 0 \implies x > -1$، والمطلوب إثبات المتراجحة على المجال $]0, +\infty[$.</div>
-                <div class="step-title">إثبات صحة المتراجحة بالاطراد فقط (دون جدول تغيرات):</div>
+                <div class="step-title">دراسة اطراد التابع المساعد وتنظيم جدول الاطراد أولاً:</div>
                 نعرف التابع المساعد $h$ على المجال الشبه مغلق $[0, +\infty[$ وفق:
                 $$h(x) = x - \ln(x+1)$$
-                1) التابع $h$ مستمر واشتقاقي على المجال $[0, +\infty[$ كفرق تابعين اشتقاقيين.<br>
-                2) مشتق التابع:
+                التابع $h$ اشتقاقي على $[0, +\infty[$ ومشتقه:
                 $$h'(x) = 1 - \frac{1}{x+1} = \frac{(x+1) - 1}{x+1} = \frac{x}{x+1}$$
-                3) <b>دراسة الاطراد:</b><br>
-                أياً كان $x \in ]0, +\infty[$ فإن البسط $x > 0$ والمقام $x+1 > 0$، ومنه يكون:
-                $$h'(x) > 0 \quad \forall x > 0$$
-                وبالتالي فإن التابع $h$ <b>متزايد تماماً</b> على المجال $[0, +\infty[$.<br>
-                4) نحسب قيمة التابع عند المبدأ:
-                $$h(0) = 0 - \ln(0+1) = -\ln(1) = 0$$
-                5) بما أن $h$ متزايد تماماً على $[0, +\infty[$، فإنه أياً كان $x > 0$:
-                $$x > 0 \implies h(x) > h(0)$$
-                وبالتعويض المباشر:
-                $$x - \ln(x+1) > 0 \implies \ln(x+1) < x$$
-                وهو المطلوب إثباته بالاعتماد الحصري على جهة اطراد التابع دون تنظيم جدول تغيرات.
+                • عند $x = 0$: المشتق ينعدم $h'(0) = 0$، وقيمة التابع هي $h(0) = 0 - \ln(1) = 0$.<br>
+                • أياً كان $x > 0$: يكون البسط $x > 0$ والمقام $x+1 > 0$، فالإشارة موجبة تماماً $h'(x) > 0$.<br><br>
+                <b>جدول الاطراد أولاً:</b>
+                <div class="table-wrapper">
+                    <table class="var-grid">
+                        <tr><th>$x$</th><td>0</td><td></td><td>$+\infty$</td></tr>
+                        <tr><th>$h'(x)$</th><td>0</td><td>+</td><td></td></tr>
+                        <tr><th>$h(x)$</th><td>0</td><td>$\nearrow$</td><td></td></tr>
+                    </table>
+                </div>
+                <div class="analysis-box">
+                    <div class="analysis-box-title">المناقشة والاستنتاج الرياضي من الجدول:</div>
+                    بما أن التابع $h$ متزايد تماماً على $[0, +\infty[$ وقيمته الابتدائية عند الصفر هي $h(0) = 0$، فإنه أياً كان $x > 0$:
+                    $$x > 0 \implies h(x) > h(0)$$
+                    وبالتعويض المباشر:
+                    $$x - \ln(x+1) > 0 \implies \ln(x+1) < x$$
+                    وهو المطلوب إثباته بالاعتماد على جدول اطراد التابع المساعد.
+                </div>
             </div>
         </div>
 
@@ -1752,21 +1761,23 @@
         </div>
     </div>
 
-    <!-- ==================== قسم الأوضاع النسبية والمقاربات ==================== -->
+    <!-- ==================== قسم الأوضاع النسبية والمقاربات (دون تحديد طريقة الحل) ==================== -->
     <div id="tab-rel-pos-tables" class="section-view">
         <div class="section-header">
-            <h2>الأوضاع النسبية والمقاربات والمماسات (جداول اطراد وإشارة الفرق $h(x)$ أولاً ثم المناقشة)</h2>
-            <span class="tag-pill">جداول الفرق والمناقشة</span>
+            <h2>الأوضاع النسبية والمقاربات والمماسات</h2>
+            <span class="tag-pill">تمارين الأوضاع النسبية</span>
         </div>
 
+        <!-- التمرين 1 (معدل) -->
         <div class="exam-block">
             <div class="exam-question-title">التمرين 1</div>
             <div class="exam-paper-text">
-                أثبت أن المستقيم $\Delta: y = 2x$ مقارب مائل للخط $C_f$ في جوار $+\infty$ للتابع $f(x) = 2x - \frac{\ln x}{x}$ على $I = ]0, +\infty[$، و<b>ادرس إشارة الفرق $h(x) = f(x) - y_{\Delta}$</b> لتحديد الوضع النسبي لـ $C_f$ مع $\Delta$.
+                أثبت أن المستقيم $\Delta: y = 2x$ مقارب مائل للخط $C_f$ في جوار $+\infty$ للتابع $f(x) = 2x - \frac{\ln x}{x}$ على المجال $I = ]0, +\infty[$، و<b>ادرس الوضع النسبي للخط $C_f$ مع المقارب $\Delta$</b>.
             </div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-rel-pos-1')">عرض الحل والجدول كاملاً</button>
             <div class="solution-drawer" id="sol-rel-pos-1">
-                • $h(x) = -\frac{\ln x}{x}$. $\lim_{x \to +\infty} h(x) = 0 \implies \Delta$ مقارب مائل.<br><br>
+                • نكون تابع الفرق: $h(x) = f(x) - y_{\Delta} = -\frac{\ln x}{x}$.<br>
+                • حساب نهاية الفرق: $\lim_{x \to +\infty} h(x) = -\lim_{x \to +\infty}\frac{\ln x}{x} = 0 \implies \Delta$ مقارب مائل في جوار $+\infty$.<br><br>
                 <b>جدول إشارة الفرق والوضع النسبي أولاً:</b>
                 <div class="table-wrapper">
                     <table class="var-grid">
@@ -1786,14 +1797,17 @@
             </div>
         </div>
 
+        <!-- التمرين 2 (معدل) -->
         <div class="exam-block">
             <div class="exam-question-title">التمرين 2</div>
             <div class="exam-paper-text">
-                أوجد معادلة المماس $(T)$ للخط $C_f$ للتابع $f(x) = \ln\left(\frac{x+1}{1-x}\right)$ في المبدأ $O(0, 0)$، وادرس الوضع النسبي لـ $C_f$ مع المماس $(T)$ بتنظيم جدول لاطراد وإشارة تابع الفرق $h(x)$.
+                أوجد معادلة المماس $(T)$ للخط $C_f$ للتابع $f(x) = \ln\left(\frac{x+1}{1-x}\right)$ في المبدأ $O(0, 0)$، و<b>ادرس الوضع النسبي للخط $C_f$ مع المماس $(T)$</b>.
             </div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-rel-pos-2')">عرض الحل والجدول كاملاً</button>
             <div class="solution-drawer" id="sol-rel-pos-2">
-                • $f'(0) = 2 \implies (T): y = 2x$. تابع الفرق: $h(x) = f(x) - 2x \implies h'(x) = \frac{2x^2}{1-x^2}$.<br><br>
+                • $f(0) = \ln(1) = 0$. المشتق: $f'(x) = \frac{1}{x+1} - \frac{-1}{1-x} = \frac{1}{x+1} + \frac{1}{1-x} = \frac{2}{1-x^2}$.<br>
+                • $f'(0) = 2 \implies (T): y - 0 = 2(x - 0) \implies (T): y = 2x$.<br>
+                • تابع الفرق: $h(x) = f(x) - 2x \implies h'(x) = \frac{2}{1-x^2} - 2 = \frac{2x^2}{1-x^2}$.<br><br>
                 <b>جدول اطراد وإشارة الفرق والوضع النسبي أولاً:</b>
                 <div class="table-wrapper">
                     <table class="var-grid">
@@ -1811,16 +1825,18 @@
             </div>
         </div>
 
+        <!-- التمرين 3 (معدل) -->
         <div class="exam-block">
             <div class="exam-question-title">التمرين 3</div>
             <div class="exam-paper-text">
-                أثبت أن المستقيم $\Delta: y = x + 1$ مقارب مائل للخط $C_f$ للتابع $f(x) = x + 1 + \ln\left(\frac{x}{x-2}\right)$ بجوار $+\infty$، وادرس الوضع النسبي لـ $C_f$ مع $\Delta$ بجدول اطراد وإشارة تابع الفرق $h(x)$.
+                أثبت أن المستقيم $\Delta: y = x + 1$ مقارب مائل للخط $C_f$ للتابع $f(x) = x + 1 + \ln\left(\frac{x}{x-2}\right)$ بجوار $+\infty$، و<b>ادرس الوضع النسبي للخط $C_f$ مع المقارب $\Delta$</b>.
             </div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-rel-pos-3')">عرض الحل والجدول كاملاً</button>
             <div class="solution-drawer" id="sol-rel-pos-3">
-                • $h(x) = \ln\left(\frac{x}{x-2}\right) \implies \lim_{x \to +\infty} h(x) = 0$ فالخط يقبل $\Delta$ مقارباً مائلاً.<br>
-                • المشتق: $h'(x) = \frac{-2}{x(x-2)} < 0$ دوماً.<br><br>
-                <b>جدول اطراد وإشارة الفرق أولاً:</b>
+                • $h(x) = f(x) - y_{\Delta} = \ln\left(\frac{x}{x-2}\right)$.<br>
+                • $\lim_{x \to +\infty} \frac{x}{x-2} = 1 \implies \lim_{x \to +\infty} h(x) = \ln(1) = 0 \implies \Delta$ مقارب مائل في جوار $+\infty$.<br>
+                • المشتق: $h'(x) = \frac{1}{x} - \frac{1}{x-2} = \frac{-2}{x(x-2)} < 0$ دوماً على $]2, +\infty[$.<br><br>
+                <b>جدول اطراد وإشارة الفرق والوضع النسبي أولاً:</b>
                 <div class="table-wrapper">
                     <table class="var-grid">
                         <tr><th>$x$</th><td>2</td><td></td><td>$+\infty$</td></tr>
@@ -1833,16 +1849,19 @@
             </div>
         </div>
 
+        <!-- التمرين 4 (معدل) -->
         <div class="exam-block">
             <div class="exam-question-title">التمرين 4</div>
             <div class="exam-paper-text">
                 <b>المطلوب 1:</b> أثبت أن الخطين البيانيين للتابعين $f(x) = \ln x$ و $g(x) = 2\sqrt{x} - 2$ يقبلان مماساً مشتركاً $(T)$ عند النقطة ذات الفاصلة $x_0 = 1$، واكتب معادلته.<br>
-                <b>المطلوب 2:</b> ادرس الوضع النسبي للخط $C_f$ مع المماس $(T)$ بتنظيم جدول لاطراد وإشارة تابع الفرق $h(x) = f(x) - y_{(T)}$.
+                <b>المطلوب 2:</b> <b>ادرس الوضع النسبي للخط $C_f$ مع المماس $(T)$</b>.
             </div>
             <button class="toggle-solution-btn" onclick="toggleSol('sol-rel-pos-4')">عرض الحل والجدول كاملاً</button>
             <div class="solution-drawer" id="sol-rel-pos-4">
-                • $f(1) = g(1) = 0$ و $f'(1) = g'(1) = 1 \implies (T): y = x - 1$.<br>
-                • تابع الفرق: $h(x) = \ln x - x + 1 \implies h'(x) = \frac{1-x}{x}$ ينعدم عند $1$.<br><br>
+                • $f(1) = \ln(1) = 0$ و $g(1) = 2(1) - 2 = 0$.<br>
+                • $f'(x) = \frac{1}{x} \implies f'(1) = 1$ و $g'(x) = \frac{1}{\sqrt{x}} \implies g'(1) = 1$.<br>
+                بما أن $f(1) = g(1)$ و $f'(1) = g'(1)$ فالخطان يقبلان مماساً مشتركاً عند $(1, 0)$ معادلته: $(T): y = x - 1$.<br>
+                • تابع الفرق: $h(x) = f(x) - y_{(T)} = \ln x - x + 1 \implies h'(x) = \frac{1-x}{x}$ ينعدم عند $1$.<br><br>
                 <b>جدول اطراد وإشارة الفرق والوضع النسبي أولاً:</b>
                 <div class="table-wrapper">
                     <table class="var-grid">
